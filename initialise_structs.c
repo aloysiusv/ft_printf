@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstrlen.c                                     :+:      :+:    :+:   */
+/*   initialise_structs.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrandria <lrandria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/08 16:40:55 by lrandria          #+#    #+#             */
-/*   Updated: 2021/07/08 17:59:14 by lrandria         ###   ########.fr       */
+/*   Created: 2021/07/08 21:00:59 by lrandria          #+#    #+#             */
+/*   Updated: 2021/07/08 22:45:06 by lrandria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "ft_printf.h"
 
-size_t	ft_putstrlen(const char *s)
-{
-	size_t	i;
+void	initialise_structs(t_flags *flags, t_type *type)
+{	
+	flags->add_space = FALSE;
+	flags->left_side = FALSE;
+	flags->leading_zeros = FALSE;
+	flags->precision = FALSE;
+	flags->zero_x = FALSE;
+	flags->sign = FALSE;
+	flags->width = FALSE;
 	
-	if (s == 0)
-		return (0);
-	i = 0;
-	while (s[i])
-		i++;
-	write(1, s, i);
-	return (i);
+	type->c = FALSE;
+	type->s = FALSE;
+	type->p = FALSE;
+	type->d_i = FALSE;
+	type->u = FALSE;
+	type->x_X = FALSE;
+	
+	return ;
 }
