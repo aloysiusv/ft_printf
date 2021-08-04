@@ -6,7 +6,7 @@
 /*   By: lrandria <lrandria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/07 18:37:14 by lrandria          #+#    #+#             */
-/*   Updated: 2021/07/08 23:47:16 by lrandria         ###   ########.fr       */
+/*   Updated: 2021/08/04 19:23:24 by lrandria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,35 +16,25 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdarg.h>
-# include <stdbool.h>
 # include <stdio.h>
 
 # define	FLAGS	" -0.#+"
 # define	TYPE	"cspdiuxX%"
 # define	NUM		"0123456789"
 
-typedef struct s_flags
+typedef struct s_info
 {
-	bool	add_space : 1;
-	bool	left_side : 1;
-	bool	leading_zeros : 1;
-	bool	precision : 1;
-	bool	zero_x : 1;
-	bool	sign : 1;
-	bool	width : 1;
-}			t_flags;
+	int	hash;
+	int	space;
+	int	dash;
+	int	zero_pad;
+	int	plus;
+	int	star;
+	int	width;
+	int	prec;
+	int	nbytes;
+}			t_info;
 
-typedef struct s_type
-{
-	bool	c : 1;
-	bool	s : 1;
-	bool	p : 1;
-	bool	d_i : 1;
-	bool	u : 1;
-	bool	x_X : 1;
-}			t_type;
-
-size_t	ft_putstrsize(const char *s);
 int		ft_printf(const char *format, ...);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lrandria <lrandria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/08 18:01:41 by lrandria          #+#    #+#             */
-/*   Updated: 2021/07/08 23:43:48 by lrandria         ###   ########.fr       */
+/*   Updated: 2021/08/04 18:48:29 by lrandria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,15 +110,15 @@ int	parse_format(const char *sub_format, va_list my_list, size_t nbytes)
 	t_type			*my_type;
 	
 	i = 1;
-	initialise_structs(&my_flags, &my_type);
+	initialise_structs(my_flags, my_type);
 	while (sub_format[i])
 	{
 		if (sub_format[i] == FLAGS)
-			which_flags(&sub_format, sub_format[i], my_list, &my_flags);
+			which_flags(sub_format, sub_format[i], my_list, my_flags);
 		if (sub_format[i] == TYPE)
-			which_type(sub_format[i], my_list, &my_type);
+			which_type(sub_format[i], my_list, my_type);
 		else
-			write(1, &sub_format[i], 1);
+			write(1, sub_format[i], 1);
 		i++;
 	}
 	return (nbytes);
