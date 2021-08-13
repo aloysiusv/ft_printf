@@ -18,8 +18,8 @@
 # include <stdarg.h>
 # include "utils.h"
 
-# define	true		1
-# define	false		0
+# define	FALSE		0
+# define	TRUE		1
 
 # define	SPACE 		t->space
 # define	DASH		t->dash
@@ -35,11 +35,8 @@
 # define	NBYTES		t->nbytes
 
 # define	ALLSYMBOLS	" -.#0123456789cspdiuxX%"
-
-// typedef struct s_bool
-// {
-// 	unsigned int	boolean: 1;
-// }				t_bool;
+# define	ALLFLAGS	" -.#0"
+# define	ALLTYPES	"cspdiuxX%"
 
 typedef struct s_info
 {

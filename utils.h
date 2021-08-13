@@ -14,8 +14,8 @@
 #include <stdlib.h>
 #include "ft_printf.h"
 
-#define	true		1
-#define	false		0
+#define	TRUE		1
+#define	FALSE		0
 
 size_t	ft_strlen(const char *s)
 {
@@ -35,30 +35,8 @@ unsigned int	if_symbol(const char *s, char c)
 	while (s[i])
 	{
 		if (s[i] == c)
-			return (true);
+			return (TRUE);
 		i++;
 	}
-	return (false);
+	return (FALSE);
 }
-
-// int		check_format_error(char *format)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	if (format == NULL)
-// 		return (-1);
-// 	while (format[i])
-// 	{
-// 		if (format[i] == '%' && ft_strlen(format) == 1)
-// 			return (-1);
-// 		if (format[i] == '%' && format[i + 1] == 	
-// 			return (-1);
-// 		i++;
-// 	)
-// }
-
-// void	print_else(char *format, size_t start, size_t end)
-// {
-	
-// }

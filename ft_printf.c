@@ -12,22 +12,51 @@
 
 #include "ft_printf.h"
 
-void	check_flags(const char *format, t_info *t)
+void	print_conversion(t_info *t, va_list ap)
 {
-	while (format[END])
-		{
-			if (format[END] == '%')
-		
+	int		c;
+
+	c = 0;
+	if (TYPE == 'c')
+	{
+		c = (int)va_arg(ap, int);
+		NBYTES += write(1, &c, 1);
+	}
+}
+
+unsigned int	store_type(t_info *t, size_t i)
+{
+	if (i == 'c')
+		TYPE = 'c';
+	if (i == 's')
+		TYPE = 's';
+	if (i == 'p')
+		TYPE = 'p';
+	if (i == 'd')
+		TYPE = 'd';
+	if (i == 'i')
+		TYPE = 'i';
+	if (i == 'u')
+		TYPE = 'u';
+	if (i == 'x')
+		TYPE = 'x';
+	if (i == 'X')
+		TYPE = 'X';
+	if (i == '%')
+		TYPE = '%';
+	else
+		return (FALSE);
+	return(TRUE);
 }
 
 void	init_info(t_info *t)
 {
-	SPACE = false;
-	DASH = false;
-	ZERO_PAD = false;
-	IF_PREC = false;
-	HASH = false;
-	PLUS = false;
+	SPACE = FALSE;
+	DASH = FALSE;
+	ZERO_PAD = FALSE;
+	IF_PREC = FALSE;
+	HASH = FALSE;
+	PLUS = FALSE;
 	TYPE = '\0';
 	START = 0;
 	END = 0;
@@ -36,31 +65,51 @@ void	init_info(t_info *t)
 	NBYTES = 0;
 }
 
-int ft_printf(const char *format, ...)
+size_t	do_your_magic(const char *str, t_info *t, va_list ap)
 {
-	// va_list		ap;
-	t_info		t[1];
-	
-	// if (!(check_format_error(format)))
-	// 	return (-1);
-	if (if_symbol(format, '%') == false)
-		NBYTES = write(1, format, ft_strlen(format));
-	else
-	va_start(ap, format);
-	while (format[i])
+	size_t	i;
+
+	i = 0;
+	while (str[i])
 	{
-		if (format[i] != '%')
+		if (str[i] == '%')
 		{
-			NBYTES += write(1, &format[i], 1);
-			i++;
+			init_info(t);
+			END = i;
+			while (str[END++])
+			{
+				if (if_symbol(ALLTYPES, END) == TRUE && store_type(t, END) == TRUE)
+					{
+						// analyse_conversion(t);
+						print_conversion(t, ap);
+						i++;
+						break ;
+					}
+				// }
+				// if (if_symbol(ALLFLAGS, END) == TRUE)
+				// {
+				// 	store_flags(t, END);
+				// 	if ((is_valid_flags(t)) == FALSE)
+				// 		return (-1);
+				// }
+			}
 		}
 		else
-		{
-			check_flags(format, &i, t);
-			go_convert(t);
-			go_print(t);
-			i++;
-		}
+			NBYTES += write(1, &str[i], 1);
+		i++;
+	}
+	return (NBYTES);
+}
+
+int ft_printf(const char *format, ...)
+{
+	va_list		ap;
+	t_info	t[1];
+	if (format == NULL)
+		return (-1);
+	else
+	va_start(ap, format);
+	NBYTES = do_your_magic(format, t, ap);
 	va_end(ap);
 	return (NBYTES);
 }
@@ -69,10 +118,10 @@ int ft_printf(const char *format, ...)
 
 int	main()
 {
-	// char	c 	= 'W';
+	char	z = 'Z';
 	// char	*s 	= "bou";
 	
-	// ft_printf("1: Hello World!\n");
-	ft_printf("2: Hello %car-rie\n");
+	ft_printf("1: Hello World!\n");
+	ft_printf("2: Hello %c'Brien!\n", z);
 	return (0);
 }
