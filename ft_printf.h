@@ -16,44 +16,27 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdarg.h>
-# include "utils.h"
 
 # define	FALSE		0
 # define	TRUE		1
 
-# define	SPACE 		t->space
-# define	DASH		t->dash
-# define	ZERO_PAD	t->zero_pad
-# define	IF_PREC		t->if_prec
-# define	HASH		t->hash
-# define	PLUS		t->plus
 # define	TYPE		t->type
-# define	START		t->start
-# define	END			t->end
-# define	WIDTH		t->width
-# define	PREC		t->prec
 # define	NBYTES		t->nbytes
-
-# define	ALLSYMBOLS	" -.#0123456789cspdiuxX%"
-# define	ALLFLAGS	" -.#0"
-# define	ALLTYPES	"cspdiuxX%"
 
 typedef struct s_info
 {
-	unsigned int		space : 1;	
-	unsigned int		dash : 1;
-	unsigned int		zero_pad : 1;
-	unsigned int		if_prec : 1;
-	unsigned int		hash : 1;
-	unsigned int		plus : 1;
-	char				type;
-	size_t				start;
-	size_t				end;
-	size_t				width;
-	size_t				prec;
-	size_t				nbytes;
+	char		type;
+	size_t		nbytes;
 }				t_info;
 
-int		ft_printf(const char *format, ...);
+int				ft_printf(const char *format, ...);
+size_t			do_your_magic(const char *str, t_info *t, va_list ap);
+void			init_info(t_info *t);
+void			go_to_conversion(t_info *t, va_list ap);
 
+size_t			ft_strlen(const char *s);
+unsigned int	if_symbol(const char *s, char c);
+void			ull_putnbrbase(t_info *t, unsigned long long nb, 
+				char *str, size_t base);
+void			int_putnbrbase(t_info *t, long nb, char *str, int base);
 #endif

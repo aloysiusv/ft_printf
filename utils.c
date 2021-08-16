@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrandria <lrandria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,12 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
 #include "ft_printf.h"
-
-#define	TRUE		1
-#define	FALSE		0
 
 size_t	ft_strlen(const char *s)
 {
@@ -39,4 +34,30 @@ unsigned int	if_symbol(const char *s, char c)
 		i++;
 	}
 	return (FALSE);
+}
+
+void	ull_putnbrbase(t_info *t, unsigned long long nb, char *str, size_t base)
+{
+	unsigned long long	lol;
+
+	lol = nb;
+	if (lol >= base)
+		ull_putnbrbase(t, lol / base, str, base);
+	NBYTES += write(1, &str[lol % base], 1);
+}
+
+void	int_putnbrbase(t_info *t, long nb, char *str, int base)
+{
+	long	lol;
+
+	if (nb >= 0)
+		lol = nb;
+	else
+	{
+		lol = -nb;
+		NBYTES += write(1, "-", 1);
+	}
+	if (lol >= base)
+		int_putnbrbase(t, lol / base, str, base);
+	NBYTES += write(1, &str[lol % base], 1);
 }
