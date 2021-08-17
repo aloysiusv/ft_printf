@@ -31,8 +31,8 @@
 # define	PREC		t->prec
 # define	NBYTES		t->nbytes
 
-# define	ALLSYMBOLS	" -.#0123456789cspdiuxX%"
-# define	ALLFLAGS	" -.#0"
+# define	ALLSYMBOLS	" -.#+0123456789cspdiuxX%"
+# define	ALLFLAGS	" -.#+0"
 # define	ALLTYPES	"cspdiuxX%"
 
 typedef struct s_info

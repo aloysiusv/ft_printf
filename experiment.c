@@ -57,8 +57,6 @@ void	ull_putnbrbase(t_info *t, unsigned long long nb, char *str, size_t base)
 	unsigned long long	lol;
 
 	lol = nb;
-	if (PLUS == TRUE)
-		NBYTES += write(1, "+", 1);
 	if (lol >= base)
 		ull_putnbrbase(t, lol / base, str, base);
 	NBYTES += write(1, &str[lol % base], 1);
@@ -69,11 +67,7 @@ void	int_putnbrbase(t_info *t, long nb, char *str, int base)
 	long	lol;
 
 	if (nb >= 0)
-	{
-		if (PLUS == TRUE)
-			NBYTES += write(1, "+", 1);
 		lol = nb;
-	}
 	else
 	{
 		lol = -nb;
@@ -145,6 +139,8 @@ void	print_di(t_info *t, va_list ap)
 	int	di;
 
 	di = va_arg(ap, int);
+	if (PLUS == TRUE)
+		NBYTES += write(1, "+", 1);
 	if (DASH == TRUE)
 		int_putnbrbase(t, di, "0123456789", 10);
 	if (WIDTH > 0)
@@ -164,6 +160,8 @@ void	print_u(t_info *t, va_list ap)
 	unsigned int u;
 
 	u = va_arg(ap, unsigned int);
+	if (PLUS == TRUE)
+		NBYTES += write(1, "+", 1);
 	if (DASH == TRUE)
 		ull_putnbrbase(t, u, "0123456789", 10);
 	if (WIDTH > 0)
@@ -245,7 +243,7 @@ size_t	do_your_magic(const char *str, t_info *t, va_list ap)
 		{
 			i++;
 			init_info(t);
-			if (if_symbol(" -0.#+", str[i]) == TRUE)
+			while (if_symbol(" -0.#+", str[i]) == TRUE)
 			{
 				store_flags(t, str[i]);
 				i++;
@@ -287,7 +285,7 @@ int ft_printf(const char *format, ...)
 
 int	main(void)
 {
-	printf("Real: [%+d]\n", 987);
-	ft_printf("Mine: [%+d]\n", 987);
+	printf("Real: [% +i]\n", 9);
+	ft_printf("Mine: [% +i]\n", 9);
 	return (0);
 }
