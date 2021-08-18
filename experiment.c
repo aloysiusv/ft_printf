@@ -13,7 +13,20 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-size_t	int_len(int n)
+size_t	ft_ullnbrlen(unsigned long long n)
+{
+	size_t	len;
+
+	len = 0;
+	while (n)
+	{
+		n /= 10;
+		len++;
+	}
+	return (len);
+}
+
+size_t	ft_intnbrlen(int n)
 {
 	size_t	len;
 
@@ -56,32 +69,6 @@ size_t	ft_atoui(const char *str)
 	}
 	return (res);
 }
-
-
-void	ft_ulltoa(t_info *t, unsigned long long n)
-{
-	unsigned long long	nb;
-	char				*n_ascii;
-	size_t				len;
-
-	len = int_len(n);
-	n_ascii = (char *)malloc(sizeof(char) * (len + 1));
-	if (n_ascii == NULL)
-		return (0);
-	n_ascii[len] = '\0';
-	nb = n;
-	if (n == 0)
-		n_ascii[0] = '0';
-	while (nb)
-	{
-		n_ascii[len - 1] = nb % 10 + '0';
-		nb /= 10;
-		len--;
-	}
-	NUM_ASCII = n_ascii;
-	free(n_ascii);
-}
-
 
 void	store_flags(t_info *t,  char i)
 {
@@ -209,8 +196,9 @@ void	print_c(t_info *t, va_list ap)
 
 void	print_s(t_info *t, va_list ap)
 {
-	size_t	i;
 	char	*s;
+	size_t	i;
+	size_t	len;
 
 	i = 0;
 	s = va_arg(ap, char *);
@@ -220,9 +208,11 @@ void	print_s(t_info *t, va_list ap)
 	{
 		if (DASH == TRUE)
 			NBYTES += write(1, &s[i++], 1);
-		if (WIDTH > 0)
+		len = 0;
+		len = ft_strlen(s) + 1;
+		if (WIDTH > 0 && WIDTH >= len)
 		{
-			WIDTH = WIDTH - ft_strlen(s + 1);
+			WIDTH = WIDTH - len;
 			while (--WIDTH > 0)
 				NBYTES += write(1, " ", 1);
 		}
@@ -234,6 +224,7 @@ void	print_s(t_info *t, va_list ap)
 void	print_p(t_info *t, va_list ap)
 {
 	unsigned long long	p;
+	unsigned long long 	len;
 
 	p = va_arg(ap, unsigned long long);
 	if (!p)
@@ -241,43 +232,50 @@ void	print_p(t_info *t, va_list ap)
 	if (DASH == TRUE)
 	{
 		NBYTES += write(1, "0x", 2);
-		ull_putnbrbase(t, p, "0123456789abcedf", 16);
+		ull_putnbrbase(t, p, "0123456789abcdef", 16);
 	}
-	if (WIDTH > 0)
+	len = 0;
+	len = ft_ullnbrlen(p) + 2;
+	if (WIDTH >= len)
 	{
-		WIDTH = WIDTH - (ft_strlen(NUM_ASCII));
+		WIDTH = WIDTH - len;
 		while (--WIDTH > 0)
-		{
-			 
-		}
 			NBYTES += write(1, " ", 1);
 	}
 	if (DASH == FALSE)
 	{
 		NBYTES += write(1, "0x", 2);
-		ull_putnbrbase(t, p, "0123456789abcedf", 16);
+		ull_putnbrbase(t, p, "0123456789abcdef", 16);
 	}
 }
 
 void	print_di(t_info *t, va_list ap)
 {
-	int	di;
+	int		di;
+	size_t	len;
 
 	di = va_arg(ap, int);
-	if (PLUS == TRUE)
+	len = 0;
+	len = ft_intnbrlen(di);
+	if (PLUS == TRUE && di > 0)
 		NBYTES += write(1, "+", 1);
 	if (SPACE == TRUE && WIDTH == 0)
 		NBYTES += write(1, " ", 1);
 	if (DASH == TRUE)
 		long_putnbrbase(t, di, "0123456789", 10);
-	if (WIDTH > 0)
-		while (--WIDTH > 0)
+	if (di < 0)
+		len = len + 1;
+	if (WIDTH >= len)
+	{	
+		WIDTH = WIDTH - len;
+		while (--WIDTH  > 0)
 		{
 			if (ZERO_PAD == TRUE)
 				NBYTES += write(1, "0", 1); 
 			else
 				NBYTES += write(1, " ", 1);
 		}
+	}
 	if (DASH == FALSE)
 		long_putnbrbase(t, di, "0123456789", 10);
 }
@@ -353,7 +351,6 @@ void	init_info(t_info *t)
 	DOT = FALSE;
 	HASH = FALSE;
 	PLUS = FALSE;
-	NUM_ASCII = '\0';
 	TYPE = '\0';
 	WIDTH = 0;
 	PREC = 0;
@@ -378,9 +375,9 @@ size_t	do_your_magic(const char *str, t_info *t, va_list ap)
 			}
 			while (str[i] >= '1' && str[i] <= '9')
 				store_width(t, str, &i);
-			if (DOT == TRUE)
-				// if (str[i + 1] >= '1' && str[i + 1] <= '9')
-					store_precision(t, str, &i);
+			// if (DOT == TRUE)
+			// 	// if (str[i + 1] >= '1' && str[i + 1] <= '9')
+			// 		store_precision(t, str, &i);
 			if (if_symbol("cspdiuxX%", str[i]) == TRUE)
 			{
 				TYPE = str[i];
@@ -408,13 +405,21 @@ int ft_printf(const char *format, ...)
 
 int	main(void)
 {
+	// char c = 'K';
 	
-	// printf("Real: [%16c]\n", 'K');
-	// ft_printf("Mine: [%16c]\n", 'K');
-	printf("Real: [% +10s]\n", "b");
-	ft_printf("Mine: [% +10s]\n", "b");
-	printf("Real: [% 0+10p]\n", 'K');
-	ft_printf("Mine: [% 0+10p]\n", 'K');
-	// ft_printf("Mine: [% 22i]\n", 9);
+	// printf("Real: [%5c]\n", c);
+	// ft_printf("Mine: [%5c]\n", c);
+	// printf("Real: [%3s]\n", "Hello");
+	// ft_printf("Mine: [%3s]\n", "Hello");
+	// printf("Real: [%5p]\n", &c);
+	// ft_printf("Mine: [%5p]\n", &c);
+	printf("Real: [%5d]\n", 123);
+	ft_printf("Mine: [%5d]\n", 123);
+	printf("Real: [%5d]\n", -50);
+	ft_printf("Mine: [%5d]\n", -50);
+	printf("Real: [%-+5d]\n", 42);
+	ft_printf("Mine: [%-+5d]\n", 42);
+	printf("Real: [%-+5d]\n", -42);
+	ft_printf("Mine: [%-+5d]\n", -42);
 	return (0);
 }
