@@ -27,13 +27,14 @@
 # define	HASH		t->hash
 # define	PLUS		t->plus
 # define	TYPE		t->type
+# define	NUM_ASCII	t->num_ascii
 # define	WIDTH		t->width
 # define	PREC		t->prec
 # define	NBYTES		t->nbytes
 
 # define	ALLSYMBOLS	" -.#+0123456789cspdiuxX%"
 # define	ALLFLAGS	" -.#+0"
-# define	ALLTYPES	"cspdiuxX%"
+# define	ALLTYPES	"cspdiuxX%"			
 
 typedef struct s_info
 {
@@ -43,6 +44,7 @@ typedef struct s_info
 	unsigned int		dot 		: 1;
 	unsigned int		hash 		: 1;
 	unsigned int		plus 		: 1;
+	char				*num_ascii;
 	char				type;
 	size_t				width;
 	size_t				prec;
