@@ -55,21 +55,21 @@ size_t	do_your_magic(const char *str, t_info *t, va_list ap)
 		{
 			i++;
 			init_info(t);
-			if (if_symbol(" -0.#+", str[i]) == TRUE)
+			while (if_symbol(ALLFLAGS, str[i]) == TRUE)
 			{
 				store_flags(t, str[i]);
 				i++;
 			}
-			// if (str[i] >= '1' && str[i] <= '9')
-			// {
-			// 	store_width(t, str, str[&i]);
-			// 	i++;
-			// }
-			// if (IF_PREC == TRUE)
-			// {
-			// 	store_precision(t, str, str[i]);
-			// 	i++;
-			// }
+			while (str[i] >= '1' && str[i] <= '9')
+				store_width(t, str, &i);
+			if (str[i] == '.') 
+			{
+				DOT = TRUE;
+				ZERO_PAD = FALSE;
+				if (str[i + 1] == '0')
+					PREC = 0;
+				store_precision(t, str, &i);
+			}
 			if (if_symbol("cspdiuxX%", str[i]) == TRUE)
 			{
 				TYPE = str[i];
@@ -106,7 +106,7 @@ int	main()
 	ft_printf("");
 	printf("Real: Hello World!\n");
 	ft_printf("Mine: Hello World!\n");
-	printf("Real: [%10c]\n", 'Z');
+	printf("Real: [%c]\n", 'Z');
 	ft_printf("Mine: [%c]\n", 'Z');
 	printf("Real: [%c], [%-10s]\n", 'A', "hoy");
 	ft_printf("Real: [%c], [%-10s]\n", 'A', "hoy");
@@ -122,11 +122,11 @@ int	main()
 	ft_printf("Mine: [%%], [%%]\n");
 	printf("v NOW FOR BONUSES v\n");
 	printf("Real: [%-10c]\n", 'K');
-	ft_printf("Mine: [%-c]\n", 'K');
-	// printf("Real: [%010d]\n", -42);
-	// ft_printf("Mine: [%010d]\n", 42);
-	// printf("Real: [%-10d]\n", -42);
-	// printf("Mine: [%-10d]\n", 42);
+	ft_printf("Mine: [%-10c]\n", 'K');
+	printf("Real: [%010d]\n", -42);
+	ft_printf("Mine: [%010d]\n", 42);
+	printf("Real: [%-10d]\n", -42);
+	printf("Mine: [%-10d]\n", 42);
 
 	return (0);
 }

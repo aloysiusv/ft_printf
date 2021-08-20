@@ -14,10 +14,6 @@ $(NAME):	$(OBJS)
 bonus:		$(OBJS) $(BONUS_OBJS)
 			ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
 
-so:
-	$(CC) -nostartfiles -fPIC $(CFLAGS) $(SRCS) $(BONUS)
-	gcc -nostartfiles -shared -o libftprintf.so $(OBJS) $(BONUS_OBJS)
-
 test:		$(OBJS) main.o # -lbsd pour bsd string
 			@$(CC) $(CFLAGS) -fsanitize=address $(OBJS) main.o
 			@./a.out

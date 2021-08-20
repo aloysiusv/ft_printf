@@ -30,9 +30,10 @@
 # define	WIDTH		t->width
 # define	PREC		t->prec
 # define	NBYTES		t->nbytes
+# define	POS			t->pos
 
 # define	ALLSYMBOLS	" -.#+0123456789cspdiuxX%"
-# define	ALLFLAGS	" -.#+0"
+# define	ALLFLAGS	" -#+0"
 # define	ALLTYPES	"cspdiuxX%"	
 
 typedef struct s_info
@@ -47,6 +48,7 @@ typedef struct s_info
 	size_t				width;
 	size_t				prec;
 	size_t				nbytes;
+	size_t				pos;
 }				t_info;
 
 int		ft_printf(const char *format, ...);
