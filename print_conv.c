@@ -12,18 +12,12 @@
 
 #include "ft_printf.h"
 
-void	print_c_or_percent(t_info *t, va_list ap)
+void	print_c(t_info *t, va_list ap)
 {
 	char	c;
 
-	if (TYPE == '%')
-		NBYTES += write(1, "%", 1);
-	else
-	{
-		c = 0;
-		c = (char)va_arg(ap, int);
-		NBYTES += write(1, &c, 1);
-	}
+	c = (char)va_arg(ap, int);
+	NBYTES += write(1, &c, 1);
 }
 
 void	print_s(t_info *t, va_list ap)
@@ -50,7 +44,7 @@ void	print_p(t_info *t, va_list ap)
 	else
 	{
 		NBYTES += write(1, "0x", 2);
-		ull_putnbrbase(t, p, "0123456789abcedf", 16);
+		ull_putnbrbase(t, p, "0123456789abcdef", 16);
 	}
 }
 
@@ -76,7 +70,30 @@ void	print_xX(t_info *t, va_list ap)
 
 	x = va_arg(ap, unsigned int);
 	if (TYPE == 'x')
-		ull_putnbrbase(t, x, "0123456789abcedf", 16);
-	else
+		ull_putnbrbase(t, x, "0123456789abcdef", 16);
+	else if (TYPE == 'X')
 		ull_putnbrbase(t, x, "0123456789ABCDEF", 16);
+}
+
+// void	print_percent(t_info *t)
+// {
+// 	NBYTES += write(1, &"%"[0], 1);
+// }
+
+void	go_to_conversion(t_info *t, va_list ap)
+{
+	if (TYPE == 'c' || TYPE == '%')
+		print_c(t, ap);
+	if (TYPE == 's')
+		print_s(t, ap);
+	if (TYPE == 'p')
+		print_p(t, ap);
+	if (TYPE == 'd' || TYPE == 'i')
+		print_di(t, ap);
+	if (TYPE == 'u')
+		print_u(t, ap);
+	if (TYPE == 'x' || TYPE == 'X')
+		print_xX(t, ap);
+	// if (TYPE == '%')
+	// 	print_percent(t);
 }

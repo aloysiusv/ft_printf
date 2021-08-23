@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_bonus.c                                      :+:      :+:    :+:   */
+/*   utils_bitwise.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrandria <lrandria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/22 14:44:02 by lrandria          #+#    #+#             */
-/*   Updated: 2021/08/22 14:44:02 by lrandria         ###   ########.fr       */
+/*   Created: 2021/08/22 22:08:00 by lrandria          #+#    #+#             */
+/*   Updated: 2021/08/22 22:08:00 by lrandria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf_bonus.h"
+#include "ft_printf.h"
 
 size_t	ft_strlen(const char *s)
 {
@@ -93,7 +93,7 @@ void	ull_putnbrbase(t_info *t, unsigned long long nb, char *str, size_t base)
 	lol = nb;
 	if (lol >= base)
 		ull_putnbrbase(t, lol / base, str, base);
-	NBYTES += write(1, &str[lol % base], 1);
+	t->nbytes += write(1, &str[lol % base], 1);
 }
 
 void	long_putnbrbase(t_info *t, int nb, char *str, long base)
@@ -105,5 +105,5 @@ void	long_putnbrbase(t_info *t, int nb, char *str, long base)
 		lol = -lol;
 	if (lol >= base)
 		long_putnbrbase(t, lol / base, str, base);
-	NBYTES += write(1, &str[lol % base], 1);
+	t->nbytes += write(1, &str[lol % base], 1);
 }

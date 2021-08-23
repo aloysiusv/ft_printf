@@ -30,8 +30,6 @@ typedef struct s_info
 }				t_info;
 
 int				ft_printf(const char *format, ...);
-size_t			do_your_magic(const char *str, t_info *t, va_list ap);
-void			init_info(t_info *t);
 void			go_to_conversion(t_info *t, va_list ap);
 
 size_t			ft_strlen(const char *s);

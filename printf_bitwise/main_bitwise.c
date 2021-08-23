@@ -1,6 +1,29 @@
 #include <stdio.h>
-#include "ft_printf_bonus.h"
+#include "ft_printf.h"
 #include "limits.h"
+
+void	print_u(t_info *t, va_list ap)
+{
+	unsigned int	u;
+	size_t			len;
+
+	u = va_arg(ap, unsigned int);
+	len = ft_ulllen_base(u, 10);
+	if ((t->flags & DOT) && t->prec > len)
+	{
+		len = t->prec;
+	if (t->flags & DASH)
+		ull_putnbrbase(t, u, "0123456789", 10);
+	while (t->width-- > len)
+	{
+		if (t->flags & ZERO_PAD)
+			t->nbytes += write(1, "0", 1); 
+		else
+			t->nbytes += write(1, " ", 1);
+	}
+	if (!(t->flags & DASH))
+		ull_putnbrbase(t, u, "0123456789", 10);
+}
 
 // int	main()
 // {
@@ -199,23 +222,83 @@ int	main(void)
     // printf("RET MINE: [%d]\n", ft_printf(" %-1d %-2d ", 0, 0));
 	// printf("REAL [% 3d]\n", INT_MIN);
 	// ft_printf("MINE [% 3d]\n", INT_MIN);
-	printf("%d\n", printf("REAL [%04d]\n", -14));
-	printf("%d\n", ft_printf("MINE [%04d]\n", -14));
-    printf("%d\n", printf("REAL [%05d]\n", -15));
-    printf("%d\n", ft_printf("MINE [%05d]\n", -15));
-	printf("%d\n", printf("REAL [%06d]\n", -16));
-	printf("%d\n", ft_printf("MINE [%06d]\n", -16));
-	printf("%d\n", printf("REAL [%011d]\n", LONG_MAX));
-	printf("%d\n", ft_printf("MINE [%011d]\n", LONG_MAX));
-    printf("%d\n", printf("REAL [%012d]\n", LONG_MIN));
-    printf("%d\n", ft_printf("MINE [%012d]\n", LONG_MIN));
-    printf("%d\n", printf("REAL [%013d]\n", UINT_MAX));
-    printf("%d\n", ft_printf("MINE [%013d]\n", UINT_MAX));
-    printf("%d\n", printf("REAL [%014d]\n", ULONG_MAX));
-    printf("%d\n", ft_printf("MINE [%014d]\n", ULONG_MAX));
-    printf("%d\n", printf("REAL [%015d]\n", 9223372036854775807LL));
-    printf("%d\n", ft_printf("MINE [%015d]\n", 9223372036854775807LL));
-    printf("%d\n", printf("REAL [%09d %010d %011d %012d %013d %014d %015d]\n", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42));
-    printf("%d\n", ft_printf("MINE [%09d %010d %011d %012d %013d %014d %015d]\n", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42));
+	// printf("%d\n", printf("REAL [%04d]\n", -14));
+	// printf("%d\n", ft_printf("MINE [%04d]\n", -14));
+    // printf("%d\n", printf("REAL [%05d]\n", -15));
+    // printf("%d\n", ft_printf("MINE [%05d]\n", -15));
+	// printf("%d\n", printf("REAL [%06d]\n", -16));
+	// printf("%d\n", ft_printf("MINE [%06d]\n", -16));
+	// printf("%d\n", printf("REAL [%011d]\n", LONG_MAX));
+	// printf("%d\n", ft_printf("MINE [%011d]\n", LONG_MAX));
+    // printf("%d\n", printf("REAL [%012d]\n", LONG_MIN));
+    // printf("%d\n", ft_printf("MINE [%012d]\n", LONG_MIN));
+    // printf("%d\n", printf("REAL [%013d]\n", UINT_MAX));
+    // printf("%d\n", ft_printf("MINE [%013d]\n", UINT_MAX));
+    // printf("%d\n", printf("REAL [%014d]\n", ULONG_MAX));
+    // printf("%d\n", ft_printf("MINE [%014d]\n", ULONG_MAX));
+    // printf("%d\n", printf("REAL [%015d]\n", 9223372036854775807LL));
+    // printf("%d\n", ft_printf("MINE [%015d]\n", 9223372036854775807LL));
+    // printf("%d\n", printf("REAL [%09d %010d %011d %012d %013d %014d %015d]\n", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42));
+    // printf("%d\n", ft_printf("MINE [%09d %010d %011d %012d %013d %014d %015d]\n", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42));
 
+	printf("REAL RET = [%d]\n", printf("REAL: [%.1u]\n", 0));
+	printf("MINE RET = [%d]\n", ft_printf("MINE: [%.1u]\n", 0));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.2u]\n", -1));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.2u]\n", -1));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.2u]\n", 1));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.2u]\n", 1));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.1u]\n", 9));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.1u]\n", 9));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.2u]\n", 10));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.2u]\n", 10));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.3u]\n", 11));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.3u]\n", 11));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.4u]\n", 15));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.4u]\n", 15));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.5u]\n", 16));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.5u]\n", 16));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.6u]\n", 17));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.6u]\n", 17));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.1u]\n", 99));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.1u]\n", 99));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.2u]\n", 100));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.2u]\n", 100));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.3u]\n", 101));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.3u]\n", 101));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.1u]\n", -9));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.1u]\n", -9));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.2u]\n", -10));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.2u]\n", -10));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.3u]\n", -11));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.3u]\n", -11));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.4u]\n", -14));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.4u]\n", -14));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.1u]\n", -15));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.1u]\n", -15));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.2u]\n", -16));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.2u]\n", -16));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.3u]\n", -99));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.3u]\n", -99));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.3u]\n", -100));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.3u]\n", -100));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.4u]\n", -101));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.4u]\n", -101));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.8u]\n", INT_MAX));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.8u]\n", INT_MAX));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.9u]\n", INT_MIN));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.9u]\n", INT_MIN));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.10u]\n", LONG_MAX));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.10u]\n", LONG_MAX));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.11u]\n", LONG_MIN));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.11u]\n", LONG_MIN));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.12u]\n", UINT_MAX));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.12u]\n", UINT_MAX));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.13u]\n", ULONG_MAX));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.13u]\n", ULONG_MAX));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.14u]\n", 9223372036854775807LL));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.14u]\n", 9223372036854775807LL));
+    printf("REAL RET = [%d]\n", printf("REAL: [%.8u %.9u %.10u %.11u %.12u %.13u %.14u]\n", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42));
+    printf("MINE RET = [%d]\n", ft_printf("MINE: [%.8u %.9u %.10u %.11u %.12u %.13u %.14u]\n", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42));
+	
+	return (0);
 }

@@ -1,60 +1,50 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_bonus.c                                  :+:      :+:    :+:   */
+/*   printf_bitwise.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrandria <lrandria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/14 18:40:22 by lrandria          #+#    #+#             */
-/*   Updated: 2021/08/14 18:40:22 by lrandria         ###   ########.fr       */
+/*   Created: 2021/08/22 21:35:07 by lrandria          #+#    #+#             */
+/*   Updated: 2021/08/22 21:35:07 by lrandria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf_bonus.h"
+#include "ft_printf.h"
 
 void	reset_info(t_info *t)
 {
-	SPACE = FALSE;
-	DASH = FALSE;
-	ZERO_PAD = FALSE;
-	DOT = FALSE;
-	HASH = FALSE;
-	PLUS = FALSE;
-	TYPE = '\0';
-	WIDTH = 0;
-	PREC = 1;
+	t->flags = 0;
+	t->type = '\0';
+	t->width = 0;
+	t->prec = 1;
 }
 
 void	init_info(t_info *t)
 {
-	SPACE = FALSE;
-	DASH = FALSE;
-	ZERO_PAD = FALSE;
-	DOT = FALSE;
-	HASH = FALSE;
-	PLUS = FALSE;
-	TYPE = '\0';
-	WIDTH = 0;
-	PREC = 1;
-	NBYTES = 0;
-	POS = 0;
+	t->flags = 0;
+	t->type = '\0';
+	t->width = 0;
+	t->prec = 1;
+	t->nbytes = 0;
+	t->pos = 0;
 }
 
 size_t	do_your_magic(const char *str, t_info *t, va_list ap)
 {
 	init_info(t);
-	while (str[POS])
+	while (str[t->pos])
 	{
-		if (str[POS] == '%')
+		if (str[t->pos] == '%')
 		{
 			reset_info(t);
 			analyse_conversion(t, str, ap);
 		}
 		else
-			NBYTES += write(1, &str[POS], 1);
-		POS++;
+			t->nbytes += write(1, &str[t->pos], 1);
+		t->pos++;
 	}
-	return (NBYTES);
+	return (t->nbytes);
 }
 
 int ft_printf(const char *format, ...)
@@ -65,8 +55,8 @@ int ft_printf(const char *format, ...)
 	if (format == NULL)
 		return (-1);
 	va_start(ap, format);
-	NBYTES = do_your_magic(format, t, ap);
+	t->nbytes = do_your_magic(format, t, ap);
 	va_end(ap);
 
-	return (NBYTES);
+	return (t->nbytes);
 }

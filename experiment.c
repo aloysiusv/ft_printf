@@ -13,7 +13,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-size_t	ft_ulllen_base(unsigned long long n, int base_len)
+size_t	ft_ulllen_base(unsigned long long n, size_t base_len)
 {
 	size_t	len;
 
@@ -28,7 +28,7 @@ size_t	ft_ulllen_base(unsigned long long n, int base_len)
 	return (len);
 }
 
-size_t	ft_intlen(int n)
+size_t	ft_intlen_base(int n, size_t base_len)
 {
 	size_t	len;
 
@@ -195,36 +195,23 @@ void	print_s(t_info *t, va_list ap)
 	s = va_arg(ap, char *);
 	if (s == NULL)
 		s = "(null)";
-	if (DOT == FALSE)
+	len = 0;
+	len = ft_strlen(s);
+	if (DASH == TRUE)
+		while (s[i])
+			NBYTES += write(1, &s[i++], 1);
+	if (WIDTH > len)
 	{
-		len = 0;
-		len = ft_strlen(s);
-		if (DASH == TRUE)
-			while (s[i])
-				NBYTES += write(1, &s[i++], 1);
-		if (WIDTH > len)
+		WIDTH = WIDTH - len;
+		while (WIDTH > 0)
 		{
-			WIDTH = WIDTH - len;
-			while (WIDTH > 0)
-			{
-				NBYTES += write(1, " ", 1);
-				WIDTH--;
-			}
+			NBYTES += write(1, " ", 1);
+			WIDTH--;
 		}
-		if (DASH == FALSE)
-			while (s[i])
-				NBYTES += write(1, &s[i++], 1);
-		}
-		else if (DOT == TRUE)
-		{
-			while (WIDTH > PREC)
-			{
-				NBYTES += write(1, " ", 1);
-				WIDTH--;
-			}
-			while (i < PREC)
-				NBYTES += write(1, &s[i++], 1);
-		}
+	}
+	if (DASH == FALSE)
+		while (s[i])
+			NBYTES += write(1, &s[i++], 1);
 }
 
 void	print_p(t_info *t, va_list ap)
@@ -269,7 +256,7 @@ void	print_di(t_info *t, va_list ap)
 
 	len = 0;
 	di = va_arg(ap, int);
-	len = ft_intlen(di);
+	len = ft_intlen_base(di, 10);
 	if (di == 0)
 		len = len + 1;
 	if (PLUS == TRUE && di >= 0)
@@ -336,7 +323,7 @@ void	print_xX(t_info *t, va_list ap)
 	{
 		if (TYPE == 'x')
 			NBYTES += write(1, "0x", 2);
-		else
+		else if (TYPE == 'X')
 			NBYTES += write(1, "0X", 2);
 		len = len + 2;
 	}
@@ -344,7 +331,7 @@ void	print_xX(t_info *t, va_list ap)
 	{
 		if (TYPE == 'x')
 			ull_putnbrbase(t, x, "0123456789abcdef", 16);
-		else
+		else if (TYPE == 'X')
 			ull_putnbrbase(t, x, "0123456789ABCDEF", 16);
 	}
 	if (WIDTH > len)
@@ -363,7 +350,7 @@ void	print_xX(t_info *t, va_list ap)
 	{
 		if (TYPE == 'x')
 			ull_putnbrbase(t, x, "0123456789abcdef", 16);
-		else
+		else if (TYPE == 'X')
 			ull_putnbrbase(t, x, "0123456789ABCDEF", 16);
 	}
 }
@@ -474,103 +461,118 @@ int ft_printf(const char *format, ...)
 
 int	main(void)
 {
-	char c 		= 'K';
-	char *str0	= NULL;
-	char *str1	= "Atchoum";
+	// char c 		= 'K';
+	// char *str0	= NULL;
+	// char *str1	= "Atchoum";
 	
-	printf("***BASIC TESTS***\n");
-	// printf("");
-	// ft_printf("");
-	printf("Real:	Hello World!\n");
-	ft_printf("Mine:	Hello World!\n");
-	printf("Real:	[%c]\n", c);
-	ft_printf("Mine:	[%c]\n", c);
-	printf("Real:	[%s]\n", str1);
-	ft_printf("Mine:	[%s]\n", str1);
-	printf("Real:	STR = [%s]\nReal:	PTR = [%p]\n", str0, str0);
-	ft_printf("Mine:	STR = [%s]\nMine:	PTR = [%p]\n", str0, str0);
-	printf("Real:	[%d], [%i]\n", INT_MIN, INT_MAX);
-	ft_printf("Mine:	[%d], [%i]\n", INT_MIN, INT_MAX);
-	printf("Real:	[%u], [%u], [%u]\n", 0, 346983, INT_MAX);
-	ft_printf("Mine:	[%u], [%u], [%u]\n", 0, 346983, INT_MAX);
-	printf("Real:	[%x], [%X], [%x]\n", 0, 346983, INT_MAX);
-	ft_printf("Mine:	[%x], [%X], [%x]\n", 0, 346983, INT_MAX);
-	printf("Real:	[%%], [%%]\n");
-	ft_printf("Mine:	[%%], [%%]\n");
+	// printf("***BASIC TESTS***\n");
+	// // printf("");
+	// // ft_printf("");
+	// printf("RET= [%d]\n", printf("Real:	Hello World!\n"));
+	// printf("RET= [%d]\n", ft_printf("Mine:	Hello World!\n"));
+	// printf("RET= [%d]\n", printf("Real:	[%c]\n", c));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%c]\n", c));
+	// printf("RET= [%d]\n", printf("Real:	[%s]\n", str1));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%s]\n", str1));
+	// printf("RET= [%d]\n", printf("Real:	STR = [%s]\nReal:	PTR = [%p]\n", str0, str0));
+	// printf("RET= [%d]\n", ft_printf("Mine:	STR = [%s]\nMine:	PTR = [%p]\n", str0, str0));
+	// printf("RET= [%d]\n", printf("Real:	[%d], [%i]\n", INT_MIN, INT_MAX));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%d], [%i]\n", INT_MIN, INT_MAX));
+	// printf("RET= [%d]\n", printf("Real:	[%u], [%u], [%u]\n", 0, 346983, INT_MAX));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%u], [%u], [%u]\n", 0, 346983, INT_MAX));
+	// printf("RET= [%d]\n", printf("Real:	[%x], [%X], [%x]\n", 0, 346983, INT_MAX));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%x], [%X], [%x]\n", 0, 346983, INT_MAX));
+	// printf("RET= [%d]\n", printf("Real:	[%%], [%%]\n"));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%%], [%%]\n"));
 	
-	printf("***DASH/WIDTH TEST***\n");
-	printf("Real:	[%-10c]\n", c);
-	ft_printf("Mine:	[%-10c]\n", c);
-	printf("Real:	[%-10s]\n", str1);
-	ft_printf("Mine:	[%-10s]\n", str1);
-	printf("Real:	STR = [%20s]\nReal:	PTR = [%20p]\n", str0, str0);
-	ft_printf("Mine:	STR = [%20s]\nMine:	PTR = [%20p]\n", str0, str0);
-	printf("Real:	STR = [%-20s]\nReal:	PTR = [%-20p]\n", str1, str1);
-	ft_printf("Mine:	STR = [%-20s]\nMine:	PTR = [%-20p]\n", str1, str1);
-	printf("Real:	[%-20d], [%20i]\n", INT_MIN, INT_MAX);
-	ft_printf("Mine:	[%-20d], [%20i]\n", INT_MIN, INT_MAX);
-	printf("Real:	[%-20d], [%20i]\n", 578, 578);
-	ft_printf("Mine:	[%-20d], [%20i]\n", 578, 578);
-	printf("Real:	[%10u], [%-10u], [%-20u]\n", 0, 346983, INT_MAX);
-	ft_printf("Mine:	[%10u], [%-10u], [%-20u]\n", 0, 346983, INT_MAX);
-	printf("Real:	[%x], [%10X], [%-20x]\n", 0, 346983, INT_MAX);
-	ft_printf("Mine:	[%x], [%10X], [%-20x]\n", 0, 346983, INT_MAX);
-	printf("Real:	[%%], [%%]\n");
-	ft_printf("Mine:	[%%], [%%]\n");
+	// printf("RET= [%d]\n", printf("***DASH/WIDTH TEST***\n"));
+	// printf("RET= [%d]\n", printf("Real:	[%-10c]\n", c));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%-10c]\n", c));
+	// printf("RET= [%d]\n", printf("Real:	[%-10s]\n", str1));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%-10s]\n", str1));
+	// printf("RET= [%d]\n", printf("Real:	STR = [%20s]\nReal:	PTR = [%20p]\n", str0, str0));
+	// printf("RET= [%d]\n", ft_printf("Mine:	STR = [%20s]\nMine:	PTR = [%20p]\n", str0, str0));
+	// printf("RET= [%d]\n", printf("Real:	STR = [%-20s]\nReal:	PTR = [%-20p]\n", str1, str1));
+	// printf("RET= [%d]\n", ft_printf("Mine:	STR = [%-20s]\nMine:	PTR = [%-20p]\n", str1, str1));
+	// printf("RET= [%d]\n", printf("Real:	[%-20d], [%20i]\n", INT_MIN, INT_MAX));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%-20d], [%20i]\n", INT_MIN, INT_MAX));
+	// printf("RET= [%d]\n", printf("Real:	[%-20d], [%20i]\n", 578, 578));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%-20d], [%20i]\n", 578, 578));
+	// printf("RET= [%d]\n", printf("Real:	[%10u], [%-10u], [%-20u]\n", 0, 346983, INT_MAX));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%10u], [%-10u], [%-20u]\n", 0, 346983, INT_MAX));
+	// printf("RET= [%d]\n", printf("Real:	[%x], [%10X], [%-20x]\n", 0, 346983, INT_MAX));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%x], [%10X], [%-20x]\n", 0, 346983, INT_MAX));
+	// printf("RET= [%d]\n", printf("Real:	[%%], [%%]\n"));
+	// printf("RET= [%d]\n", ft_printf("Mine:	[%%], [%%]\n"));
 
-
-
-
-
-
-
-
-	// printf("Real: [%-10c]\n", c);
-	// ft_printf("Mine: [%-c]\n", c);
-	// printf("Real: [%5p]\n", &c);
-	// ft_printf("Mine: [%5p]\n", &c);
-	// printf("Real: [%05d]\n", 123);
-	// ft_printf("Mine: [%05d]\n", 123);
-	// printf("Real: [%05d]\n", -50);
-	// ft_printf("Mine: [%05d]\n", -50);
-	// printf("Real: [%+05d]\n", 4);
-	// ft_printf("Mine: [%+05d]\n", 4);
-	// printf("Real: [%-+5d]\n", -42);
-	// ft_printf("Mine: [%-+5d]\n", -42);
-	// printf("v UNSIGNED v\n");
-	// printf("Real: [%8u]\n", 997);
-	// ft_printf("Mine: [%8u]\n", 997);
-	// printf("Real: [%-8u]\n", 0);
-	// ft_printf("Mine: [%-8u]\n", 0);
-	// printf("Real: [%08u]\n", 997);
-	// ft_printf("Mine: [%08u]\n", 997);
-	// printf("v HEXA v\n");
-	// printf("Real: [%-10x]\n", 56);
-	// ft_printf("Mine: [%-10x]\n", 56);
-	// printf("Real: [%10X]\n", 22);
-	// ft_printf("Mine: [%10X]\n", 22);
-	// printf("Real: [%010X]\n", 76);
-	// ft_printf("Mine: [%010X]\n", 76);
-	// printf("Real: [%0#10x]\n", 34);
-	// ft_printf("Mine: [%0#10x]\n", 34);
-	// printf("Real: [%0#10x]\n", 0);
-	// ft_printf("Mine: [%0#10x]\n", 0);
-	// printf("Real: [%0#2x]\n", 88);
-	// ft_printf("Mine: [%0#2x]\n", 88);
-	// printf("Real: [%%]\n");
-	// ft_printf("Mine: [%%]\n");
+	// printf("RET= [%d]\n", printf("Real: [%-10c]\n", c));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%-c]\n", c));
+	// printf("RET= [%d]\n", printf("Real: [%5p]\n", &c));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%5p]\n", &c));
+	// printf("RET= [%d]\n", printf("Real: [%05d]\n", 123));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%05d]\n", 123));
+	// printf("RET= [%d]\n", printf("Real: [%05d]\n", -50));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%05d]\n", -50));
+	// printf("RET= [%d]\n", printf("Real: [%+05d]\n", 4));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%+05d]\n", 4));
+	// printf("RET= [%d]\n", printf("Real: [%-+5d]\n", -42));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%-+5d]\n", -42));
+	// printf("RET= [%d]\n", printf("v UNSIGNED v\n"));
+	// printf("RET= [%d]\n", printf("Real: [%8u]\n", 997));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%8u]\n", 997));
+	// printf("RET= [%d]\n", printf("Real: [%-8u]\n", 0));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%-8u]\n", 0));
+	// printf("RET= [%d]\n", printf("Real: [%08u]\n", 997));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%08u]\n", 997));
+	// printf("RET= [%d]\n", printf("v HEXA v\n"));
+	// printf("RET= [%d]\n", printf("Real: [%-10x]\n", 56));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%-10x]\n", 56));
+	// printf("RET= [%d]\n", printf("Real: [%10X]\n", 22));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%10X]\n", 22));
+	// printf("RET= [%d]\n", printf("Real: [%010X]\n", 76));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%010X]\n", 76));
+	// printf("RET= [%d]\n", printf("Real: [%0#10x]\n", 34));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%0#10x]\n", 34));
+	// printf("RET= [%d]\n", printf("Real: [%0#10x]\n", 0));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%0#10x]\n", 0));
+	// printf("RET= [%d]\n", printf("Real: [%0#2x]\n", 88));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%0#2x]\n", 88));
+	// printf("RET= [%d]\n", printf("Real: [%%]\n"));
+	// printf("RET= [%d]\n", ft_printf("Mine: [%%]\n"));
 	// printf("v PRECISION v\n");
-	// printf("	CHARS	\n");
-	// printf("Real: 		[%5.3s]\n", "Hello");
-	// ft_printf("Mine: 		[%5.3s]\n", "Hello");
-	// printf("Real: 		[%2.4s]\n", "Hello");
-	// ft_printf("Mine: 		[%2.4s]\n", "Hello");
-	// printf("Real: 		[%5.0s]\n", "Hello");
-	// ft_printf("Mine: 		[%5.0s]\n", "Hello");
+	// printf("RET= [%d]\n", printf("	CHARS	\n"));
+	// printf("RET= [%d]\n", printf("Real: 		[%5.3s]\n", "Hello"));
+	// printf("RET= [%d]\n", ft_printf("Mine: 		[%5.3s]\n", "Hello"));
+	// printf("RET= [%d]\n", printf("Real: 		[%2.4s]\n", "Hello"));
+	// printf("RET= [%d]\n", ft_printf("Mine: 		[%2.4s]\n", "Hello"));
+	// printf("RET= [%d]\n", printf("Real: 		[%5.0s]\n", "Hello"));
+	// printf("RET= [%d]\n", ft_printf("Mine: 		[%5.0s]\n", "Hello"));
 	// printf("	INTEGERS	\n");
-	// printf("Real:		[%d]\n", 4224);
-	// printf("Real:		[%+.d]\n", 4224);
-	// printf("Real:		[%+.d]\n", -4224);
-	// printf("Real: 		[%+.5d]\n", 4224);
+	// printf("RET= [%d]\n", printf("Real:		[%d]\n", 4224));
+	// printf("RET= [%d]\n", printf("Real:		[%+.d]\n", 4224));
+	// printf("RET= [%d]\n", printf("Real:		[%+.d]\n", -4224));
+	// printf("RET= [%d]\n", printf("Real: 		[%+.5d]\n", 4224));
+
+	// printf("RET= [%d]\n", printf("Real [%c]\n", '0'));
+	// printf("RET= [%d]\n", ft_printf("Mine [%c]\n", '0'));
+	// printf("RET= [%d]\n", printf("Real [ %c ]\n", '0'));
+	// printf("RET= [%d]\n", ft_printf("Mine [ %c ]\n", '0'));
+	// printf("RET= [%d]\n", printf("Real [ %c]\n", '0' - 256));
+	// printf("RET= [%d]\n", ft_printf("Mine [ %c]\n", '0' - 256));
+    // printf("RET= [%d]\n", printf("Real [%c ]\n", '0' + 256));
+	// printf("RET= [%d]\n", ft_printf("Mine [%c ]\n", '0' + 256));
+	// printf("RET= [%d]\n", printf("Real [%c %c %c] \n", '0', 0, '1'));
+	// printf("RET= [%d]\n", ft_printf("Mine [%c %c %c] \n", '0', 0, '1'));
+    // printf("RET= [%d]\n", printf("Real [%c %c %c] \n", ' ', ' ', ' '));
+	// printf("RET= [%d]\n", ft_printf("Mine [%c %c %c] \n", ' ', ' ', ' '));
+    // printf("RET= [%d]\n", printf("Real [%c %c %c] \n", '1', '2', '3'));
+	// printf("RET= [%d]\n", ft_printf("Mine [%c %c %c] \n", '1', '2', '3'));
+    // printf("RET= [%d]\n", printf("Real [%c %c %c] \n", '2', '1', 0));
+	// printf("RET= [%d]\n", ft_printf("Mine [%c %c %c] \n", '2', '1', 0));
+	// printf("RET= [%d]\n", printf("Real [%c %c %c] \n", 0, '1', '2'));
+	// printf("RET= [%d]\n", ft_printf("Mine [%c %c %c] \n", 0, '1', '2'));
+
+	ft_printf("%+20d", 678);
+
 	return (0);
 }
