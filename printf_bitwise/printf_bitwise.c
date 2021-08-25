@@ -17,7 +17,7 @@ void	reset_info(t_info *t)
 	t->flags = 0;
 	t->type = '\0';
 	t->width = 0;
-	t->prec = 1;
+	t->prec = 0;
 }
 
 void	init_info(t_info *t)
@@ -25,7 +25,7 @@ void	init_info(t_info *t)
 	t->flags = 0;
 	t->type = '\0';
 	t->width = 0;
-	t->prec = 1;
+	t->prec = 0;
 	t->nbytes = 0;
 	t->pos = 0;
 }

@@ -57,7 +57,7 @@ size_t	ft_intlen_base(int n, size_t base_len)
 	return (len);
 }
 
-unsigned int	if_symbol(const char *s, char c)
+t_bool	if_symbol(const char *s, char c)
 {
 	size_t	i;
 
