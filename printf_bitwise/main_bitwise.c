@@ -2,29 +2,37 @@
 #include "ft_printf.h"
 #include "limits.h"
 
-// void	print_u(t_info *t, va_list ap)
-// {
-// 	unsigned int	u;
-// 	size_t			len;
+void	print_u(t_info *t, va_list ap)
+{
+	unsigned int	u;
+	size_t			len;
+	size_t			len_prec;
 
-// 	u = va_arg(ap, unsigned int);
-// 	len = ft_ulllen_base(u, 10);
-// 	if ((t->flags & DOT) && t->prec > len)
-// 	{
-// 		len = t->prec;
-// 	if (t->flags & DASH)
-// 		ull_putnbrbase(t, u, "0123456789", 10);
-// 	while (t->width-- > len)
-// 	{
-// 		if (t->flags & ZERO_PAD)
-// 			t->nbytes += write(1, "0", 1);
-// 		else
-// 			t->nbytes += write(1, " ", 1);
-// 	}
-// 	if (!(t->flags & DASH))
-// 		ull_putnbrbase(t, u, "0123456789", 10);
-// }
-
+	u = va_arg(ap, unsigned int);
+	len = ft_ulllen_base(u, 10);
+	len_prec = len;
+	if ((t->flags & DOT) && t->prec > len_prec)
+		len_prec = t->prec;
+	if (t->flags & DASH)
+	{
+		while (len_prec > len++) 
+			t->nbytes += write(1, "0", 1);
+		ull_putnbrbase(t, u, "0123456789", 10);
+	}
+	while (t->width-- > len_prec)
+	{
+		if (t->flags & ZERO_PAD)
+			t->nbytes += write(1, "0", 1);
+		else
+			t->nbytes += write(1, " ", 1);
+	}
+	if (!(t->flags & DASH))
+	{
+		while (len_prec > len++)
+			t->nbytes += write(1, "0", 1);
+		ull_putnbrbase(t, u, "0123456789", 10);
+	}
+}
 // void	print_di(t_info *t, va_list ap)
 // {
 // 	int		di;
@@ -62,30 +70,41 @@
 // 	}
 // }
 
-// void	print_xX(t_info *t, va_list ap, char *hash, char *base)
-// {
-// 	unsigned int 	x;
-// 	size_t			len;
-
-// 	x = va_arg(ap, unsigned int);
-// 	len = ft_ulllen_base(x, 16);
-// 	if  ((t->flags & HASH) && x != 0)
-// 	{
-// 		t->nbytes += write(1, hash, 2);
-// 		len = len + 2;
-// 	}
-// 	if (t->flags & DASH)
-// 		ull_putnbrbase(t, x, base, 16);
-// 	while (t->width-- > len)
-// 	{
-// 		if ((t->flags & ZERO_PAD))
-// 			t->nbytes += write(1, "0", 1);
-// 		else
-// 			t->nbytes += write(1, " ", 1);
-// 	}
-// 	if (!(t->flags & DASH))
-// 		ull_putnbrbase(t, x, base, 16);
-// }
+void	print_xX(t_info *t, va_list ap, char *hash, char *base)
+{
+	unsigned int 	x;
+	size_t			len;
+	size_t			len_prec;
+	x = va_arg(ap, unsigned int);
+	len = ft_ulllen_base(x, 16);
+	len_prec = len;
+	if ((t->flags & DOT) && t->prec > len)
+		len_prec = t->prec;
+	if  ((t->flags & HASH) && x != 0)
+	{
+		t->nbytes += write(1, hash, 2);
+		// len_prec = len_prec + 2;
+	}
+	if (t->flags & DASH)
+	{
+		while (len_prec > len++)
+			t->nbytes += write(1, "0", 1);
+		ull_putnbrbase(t, x, base, 16);
+	}
+	while (t->width-- > len_prec)
+	{
+		if ((t->flags & ZERO_PAD))
+			t->nbytes += write(1, "0", 1); 
+		else
+			t->nbytes += write(1, " ", 1);
+	}
+	if (!(t->flags & DASH))
+	{
+		while (len_prec > len++)
+			t->nbytes += write(1, "0", 1);
+		ull_putnbrbase(t, x, base, 16);
+	}
+}
 
 // int	main()
 // {
