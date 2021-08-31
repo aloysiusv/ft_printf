@@ -34,8 +34,8 @@ typedef struct s_info
 {
 	unsigned int		flags;
 	char				type;
-	size_t				width;
-	size_t				prec;
+	int					prec;
+	int					width;
 	size_t				nbytes;
 	size_t				pos;
 }				t_info;

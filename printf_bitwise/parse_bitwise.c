@@ -34,53 +34,6 @@ void	go_to_conversion(t_info *t, const char *str, va_list ap)
 		print_percent(t);
 }
 
-void	store_flags(t_info *t, const char *str)
-{
-	if (str[t->pos] == ' ' && !(t->flags & PLUS))
-		t->flags |= SPACE;
-	else if (str[t->pos] == '-')
-	{
-		t->flags |= DASH;
-		t->flags &= ~ZERO_PAD;
-	}
-	else if (str[t->pos] == '0' && !(t->flags & DASH) && !(t->flags & DOT))
-		t->flags |= ZERO_PAD;
-	else if (str[t->pos] == '#')
-		t->flags |= HASH;
-	else if (str[t->pos] == '+')
-	{
-		t->flags |= PLUS;
-		t->flags &= ~SPACE;
-	}
-	t->pos++;
-}
-
-void	store_width(t_info *t, const char *str)
-{
-	char 	*width_ascii;
-	size_t	len;
-	size_t	j;
-	size_t	k;
-
-	len = 0;
-	j = t->pos;
-	while (if_symbol("cspdiuxX%", str[j]) == FALSE)
-	{
-		if (str[j] >= '0' && str[j] <= '9')
-			len++;
-		j++;
-	}
-	width_ascii = (char *)malloc(sizeof(char) * len + 1);
-	if (width_ascii == NULL)
-		return ;
-	k = 0;
-	while (str[t->pos] >= '0' && str[t->pos] <= '9')
-		width_ascii[k++] = str[t->pos++];
-	width_ascii[k] = '\0';
-	t->width = ft_atoui((const char *)width_ascii);
-	free(width_ascii);
-}
-
 void	store_precision(t_info *t, const char *str)
 {
 	char 	*precision_ascii;
@@ -109,6 +62,53 @@ void	store_precision(t_info *t, const char *str)
 	precision_ascii[k] = '\0';
 	t->prec = ft_atoui((const char *)precision_ascii);
 	free(precision_ascii);
+}
+
+void	store_width(t_info *t, const char *str)
+{
+	char 	*width_ascii;
+	size_t	len;
+	size_t	j;
+	size_t	k;
+
+	len = 0;
+	j = t->pos;
+	while (if_symbol(".cspdiuxX%", str[j]) == FALSE)
+	{
+		if (str[j] >= '0' && str[j] <= '9')
+			len++;
+		j++;
+	}
+	width_ascii = (char *)malloc(sizeof(char) * len + 1);
+	if (width_ascii == NULL)
+		return ;
+	k = 0;
+	while (str[t->pos] >= '0' && str[t->pos] <= '9')
+		width_ascii[k++] = str[t->pos++];
+	width_ascii[k] = '\0';
+	t->width = ft_atoui((const char *)width_ascii);
+	free(width_ascii);
+}
+
+void	store_flags(t_info *t, const char *str)
+{
+	if (str[t->pos] == ' ' && !(t->flags & PLUS))
+		t->flags |= SPACE;
+	else if (str[t->pos] == '-')
+	{
+		t->flags |= DASH;
+		t->flags &= ~ZERO_PAD;
+	}
+	else if (str[t->pos] == '0' && !(t->flags & DASH))
+		t->flags |= ZERO_PAD;
+	else if (str[t->pos] == '#')
+		t->flags |= HASH;
+	else if (str[t->pos] == '+')
+	{
+		t->flags |= PLUS;
+		t->flags &= ~SPACE;
+	}
+	t->pos++;
 }
 
 void	analyse_conversion(t_info *t, const char *str, va_list ap)

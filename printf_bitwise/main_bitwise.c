@@ -70,6 +70,48 @@ void	print_u(t_info *t, va_list ap)
 // 	}
 // }
 
+// void	print_di(t_info *t, va_list ap)
+// {
+// 	long 	di;
+// 	long	len;
+
+// 	di = va_arg(ap, int);
+// 	len = ft_intlen_base(di, 10);
+// 	if ((t->flags & DOT) && t->prec < 1 && di == 0)
+// 	{
+// 		print_width(t, len);
+// 		return ;
+// 	}
+// 	if (t->flags & DASH)
+// 	{
+// 		print_signs(t, di);
+// 		if (t->flags & DOT)
+// 			print_precision(t, &len);
+// 		long_putnbrbase(t, di, "0123456789", 10);
+// 		print_width(t, len);
+// 	}
+// 	if (!(t->flags & DASH))
+// 	{
+// 		// if ((t->flags & DOT) && t->prec > len)
+// 		if (t->flags & PLUS)
+// 			len += 1;
+// 		// print_width(t, len);
+// 		// print_signs(t, di);
+// 		// print_precision(t, &len, di);
+// 		print_width(t, len);
+// 		print_signs(t, di);
+// 		if ((t->flags & DOT) && t->prec > len)
+// 		{
+// 			if (di < 0)
+// 				len -= 1;
+// 			while (t->prec != 0  && t->prec > len++)
+// 				t->nbytes += write(1, "0", 1);
+// 			// len = t->prec;
+// 		}
+// 		long_putnbrbase(t, di, "0123456789", 10);
+// 	}
+// }
+
 void	print_xX(t_info *t, va_list ap, char *hash, char *base)
 {
 	unsigned int 	x;

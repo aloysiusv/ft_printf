@@ -12,6 +12,49 @@
 
 #include "ft_printf.h"
 
+// t_bool	print_signs(t_info *t, long di)
+// {
+// 	if (di < 0)
+// 	{
+// 		t->nbytes += write(1, "-", 1);
+// 		return (TRUE);
+// 	}
+// 	if (di >= 0 && (t->flags & PLUS))
+// 	{
+// 		t->nbytes += write(1, "+", 1);
+// 		return (TRUE);
+// 	}
+// 	if (t->flags & SPACE)
+// 	{
+// 		t->nbytes += write(1, " ", 1);
+// 		return (TRUE);
+// 	}
+// 	return (FALSE);
+// }
+
+void	print_width(t_info *t, long len)
+{
+	while (t->width > len++)
+	{
+		if ((t->flags & ZERO_PAD) && t->prec < len)
+			t->nbytes += write(1, "0", 1);
+		else
+			t->nbytes += write(1, " ", 1);
+	}
+}
+
+// void	print_precision(t_info *t, long *len)
+// {
+// 	while (t->prec > *len++)
+// 		t->nbytes += write(1, "0", 1);
+// 	if (!(t->flags & DASH))
+// 	{
+// 		*len = t->prec;
+// 		if (t->flags & PLUS)
+// 			*len += 1;
+// 	}
+// }
+
 void	print_c(t_info *t, va_list ap)
 {
 	char	c;
@@ -19,8 +62,8 @@ void	print_c(t_info *t, va_list ap)
 	c = (char)va_arg(ap, int);
 	if (t->flags & DASH)
 		t->nbytes += write(1, &c, 1);
-	while (t->width-- > 1)
-		t->nbytes += write(1, " ", 1);
+	if (t->width > 1)
+		print_width(t, 1);
 	if (!(t->flags & DASH))
 		t->nbytes += write(1, &c, 1);
 }
@@ -28,44 +71,31 @@ void	print_c(t_info *t, va_list ap)
 void	print_s(t_info *t, va_list ap)
 {
 	char	*s;
-	size_t	len;
+	int		len;
 
 	s = va_arg(ap, char *);
 	if (s == NULL)
 		s = "(null)";
-	len = ft_strlen(s);
+	len = (int)ft_strlen(s);
 	if ((t->flags & DOT) && t->prec < len)
 		len = t->prec; 
 	if (t->flags & DASH)
 		t->nbytes += write(1, s, len);
-	while (t->width-- > len)
-		t->nbytes += write(1, " ", 1);
+	if (t->width > len)
+		print_width(t, len);
 	if (!(t->flags & DASH))
 		t->nbytes += write(1, s, len);
 }
 
-// void	print_p_nil(t_info *t)
-// {
-// 	if (t->flags & DASH)
-// 		t->nbytes += write(1, "(nil)", 0);
-// 	while (t->width-- > 5)
-// 		t->nbytes += write(1, " ", 1);
-// 	if (!(t->flags & DASH))
-// 		t->nbytes += write(1, "(nil)", 0);
-// }
-
 void	print_p(t_info *t, va_list ap)
 {
 	unsigned long long	p;
-	unsigned long long 	len;
+	long 				len;
 
 	p = va_arg(ap, unsigned long long);
 	len = ft_ulllen_base(p, 16) + 2;
 	if (!p)
 	{
-	// 	print_p_nil(t);
-	// 	return ;
-	// }
 		p = 0;
 		len = 3;
 	}
@@ -74,8 +104,8 @@ void	print_p(t_info *t, va_list ap)
 		t->nbytes += write(1, "0x", 2);
 		ull_putnbrbase(t, p, "0123456789abcdef", 16);
 	}
-	while (t->width-- > len)
-		t->nbytes += write(1, " ", 1);
+	if (t->width > len)
+		print_width(t, len);
 	if (!(t->flags & DASH))
 	{
 		t->nbytes += write(1, "0x", 2);
@@ -85,26 +115,32 @@ void	print_p(t_info *t, va_list ap)
 
 void	print_zero_prec(t_info *t)
 {
-	while (t->width-- != 0)
+	while (t->width-- > 0)
 		t->nbytes += write(1, " ", 1);	
 }
 
 void	print_di(t_info *t, va_list ap)
 {
-	int		di;
-	size_t	len;
+	long	di;
+	long	len;
+	long	len_prec;
 
 	di = va_arg(ap, int);
 	len = ft_intlen_base(di, 10);
+	len_prec = len;
 	if ((t->flags & DOT) && t->prec == 0 && di == 0)
 	{
 		print_zero_prec(t);
 		return ;
 	}
-	if ((t->flags & DOT) && t->prec >= len && di < 0)
-		len -= 1;
-	if ((t->flags & PLUS) && di >= 0)
-		len += 1;
+	if ((t->flags & DOT) && t->prec >= len)
+	{
+		if (di < 0)
+			t->prec += 1;
+		if ((t->flags & PLUS) && di >= 0)
+			t->prec += 1;
+		len_prec = t->prec;
+	}
 	if ((t->flags & SPACE) && t->width <= len && di >= 0)
 		t->nbytes += write(1, " ", 1);
 	if ((t->flags & PLUS) && (t->flags & ZERO_PAD) && di >= 0)
@@ -113,35 +149,29 @@ void	print_di(t_info *t, va_list ap)
 		t->nbytes += write(1, "-", 1);
 	if (t->flags & DASH)
 	{
-		if (di < 0)
+		if ((t->flags & PLUS) && !(t->flags & ZERO_PAD) && di >= 0)
+			t->nbytes += write(1, "+", 1);
+		if (!(t->flags & ZERO_PAD) && di < 0)
 			t->nbytes += write(1, "-", 1);
-		if ((t->flags & DOT) && t->prec > len)
-		{
-			while (t->prec > len++)
-				t->nbytes += write(1, "0", 1);
-			len = t->prec;
-		}
+		while (len_prec > len++)
+			t->nbytes += write(1, "0", 1);
 		long_putnbrbase(t, di, "0123456789", 10);
 	}
-	while (t->width-- > len)
+	while (t->width-- > len_prec)
 	{
 		if (t->flags & ZERO_PAD)
 			t->nbytes += write(1, "0", 1); 
 		else
 			t->nbytes += write(1, " ", 1);	
 	}
-	if ((t->flags & PLUS) && !(t->flags & ZERO_PAD) && di >= 0)
-		t->nbytes += write(1, "+", 1);
 	if (!(t->flags & DASH))
 	{
+		if ((t->flags & PLUS) && !(t->flags & ZERO_PAD) && di >= 0)
+			t->nbytes += write(1, "+", 1);
 		if (!(t->flags & ZERO_PAD) && di < 0)
 			t->nbytes += write(1, "-", 1);
-		if ((t->flags & DOT) && t->prec > len)
-		{
-			while (t->prec != 0  && t->prec > len++)
-				t->nbytes += write(1, "0", 1);
-			len = t->prec;
-		}
+		while (len_prec > len++)
+			t->nbytes += write(1, "0", 1);
 		long_putnbrbase(t, di, "0123456789", 10);
 	}
 }
@@ -149,26 +179,26 @@ void	print_di(t_info *t, va_list ap)
 void	print_u(t_info *t, va_list ap)
 {
 	unsigned int	u;
-	size_t			len;
+	long			len;
+	long			len_prec;
 
 	u = va_arg(ap, unsigned int);
 	len = ft_ulllen_base(u, 10);
+	len_prec = len;
 	if ((t->flags & DOT) && t->prec == 0 && u == 0)
 	{
 		print_zero_prec(t);
 		return ;
 	}
+	if ((t->flags & DOT) && t->prec > len)
+		len_prec = t->prec;
 	if (t->flags & DASH)
 	{
-		if ((t->flags & DOT) && t->prec > len)
-		{
-			while (t->prec != 0  && t->prec > len++)
-				t->nbytes += write(1, "0", 1);
-			len = t->prec;
-		}
+		while (len_prec > len++)
+			t->nbytes += write(1, "0", 1);
 		ull_putnbrbase(t, u, "0123456789", 10);
 	}
-	while (t->width-- > len)
+	while (t->width-- > len_prec)
 	{
 		if (t->flags & ZERO_PAD)
 			t->nbytes += write(1, "0", 1);
@@ -177,12 +207,8 @@ void	print_u(t_info *t, va_list ap)
 	}
 	if (!(t->flags & DASH))
 	{
-		if ((t->flags & DOT) && t->prec > len)
-		{
-			while (t->prec != 0  && t->prec > len++)
-				t->nbytes += write(1, "0", 1);
-			len = t->prec;
-		}
+		while (len_prec > len++)
+			t->nbytes += write(1, "0", 1);
 		ull_putnbrbase(t, u, "0123456789", 10);
 	}
 }
@@ -190,31 +216,27 @@ void	print_u(t_info *t, va_list ap)
 void	print_xX(t_info *t, va_list ap, char *hash, char *base)
 {
 	unsigned int 	x;
-	size_t			len;
-
+	long			len;
+	long			len_prec;
 	x = va_arg(ap, unsigned int);
 	len = ft_ulllen_base(x, 16);
+	len_prec = len;
 	if ((t->flags & DOT) && t->prec == 0 && x == 0)
 	{
 		print_zero_prec(t);
 		return ;
 	}
+	if ((t->flags & DOT) && t->prec > len)
+		len_prec = t->prec;
 	if  ((t->flags & HASH) && x != 0)
-	{
 		t->nbytes += write(1, hash, 2);
-		// len_prec = len_prec + 2;
-	}
 	if (t->flags & DASH)
 	{
-		if ((t->flags & DOT) && t->prec > len)
-		{
-			while (t->prec != 0  && t->prec > len++)
-				t->nbytes += write(1, "0", 1);
-			len = t->prec;
-		}
+		while (len_prec > len++)
+			t->nbytes += write(1, "0", 1);
 		ull_putnbrbase(t, x, base, 16);
 	}
-	while (t->width-- > len)
+	while (t->width-- > len_prec)
 	{
 		if ((t->flags & ZERO_PAD))
 			t->nbytes += write(1, "0", 1); 
@@ -223,7 +245,7 @@ void	print_xX(t_info *t, va_list ap, char *hash, char *base)
 	}
 	if (!(t->flags & DASH))
 	{
-		while (t->prec != 0 && t->prec > len++)
+		while (len_prec > len++)
 			t->nbytes += write(1, "0", 1);
 		ull_putnbrbase(t, x, base, 16);
 	}
