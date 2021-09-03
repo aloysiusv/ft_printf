@@ -47,7 +47,7 @@ void			print_s(t_info *t, va_list ap);
 void			print_p(t_info *t, va_list ap);
 void			print_di(t_info *t, va_list ap);
 void			print_u(t_info *t, va_list ap);
-void			print_xX(t_info *t, va_list ap, char *hash, char *base);
+void			print_xX(t_info *t, va_list ap, char *ox, char *base);
 void			print_percent(t_info *t);
 
 size_t			ft_strlen(const char *s);

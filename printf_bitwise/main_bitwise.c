@@ -112,6 +112,45 @@ void	print_u(t_info *t, va_list ap)
 // 	}
 // }
 
+void	print_xX(t_info *t, va_list ap, char *ox, char *base)
+{
+	unsigned int 	x;
+	long			len;
+
+	x = va_arg(ap, unsigned int);
+	len = ft_ulllen_base(x, 16);
+	if ((t->flags & DOT) && t->prec == 0 && x == 0)
+	{
+		print_zero_prec(t);
+		return ;
+	}
+	if  ((t->flags & HASH) && x != 0)
+		t->nbytes += write(1, ox, 2);
+	if (t->flags & DASH)
+	{
+		if ((t->flags & DOT) && t->prec > len)
+		{
+			while (t->prec != 0  && t->prec > len++)
+				t->nbytes += write(1, "0", 1);
+			len = t->prec;
+		}
+		ull_putnbrbase(t, x, base, 16);
+	}
+	while (t->width-- > len)
+	{
+		if ((t->flags & ZERO_PAD))
+			t->nbytes += write(1, "0", 1); 
+		else
+			t->nbytes += write(1, " ", 1);
+	}
+	if (!(t->flags & DASH))
+	{
+		while (t->prec != 0 && t->prec > len++)
+			t->nbytes += write(1, "0", 1);
+		ull_putnbrbase(t, x, base, 16);
+	}
+}
+
 void	print_xX(t_info *t, va_list ap, char *hash, char *base)
 {
 	unsigned int 	x;
