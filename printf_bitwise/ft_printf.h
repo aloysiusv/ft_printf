@@ -52,11 +52,19 @@ void			print_percent(t_info *t);
 
 size_t			ft_strlen(const char *s);
 size_t			ft_atoui(const char *str);
+void			adjust_len(t_info *t, int *len, long di);
+t_bool			if_symbol(const char *s, char c);
+
+t_bool			print_nothing(t_info *t, long di);
+void			print_pre_signs(t_info *t, int init_len, long di);
+void			print_post_signs(t_info *t, int len, int init_len, long di);
+void			print_padding(t_info *t, int len, int init_len);
+void			print_width(t_info *t, int len, long di);
+
 size_t			ft_ulllen_base(unsigned long long n, size_t base_len);
 size_t			ft_intlen_base(int n, size_t base_len);
 void			ull_putnbrbase(t_info *t, unsigned long long nb,
 					char *str, size_t base);
 void			long_putnbrbase(t_info *t, int nb, char *str, long base);
-t_bool			if_symbol(const char *s, char c);
 
 #endif

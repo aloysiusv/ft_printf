@@ -15,7 +15,6 @@
 void	go_to_conversion(t_info *t, const char *str, va_list ap)
 {
 	t->type = str[t->pos];
-	
 	if (t->type == 'c')
 		print_c(t, ap);
 	if (t->type == 's')
@@ -36,13 +35,11 @@ void	go_to_conversion(t_info *t, const char *str, va_list ap)
 
 void	store_precision(t_info *t, const char *str)
 {
-	char 	*precision_ascii;
+	char	*precision_ascii;
 	size_t	len;
 	size_t	j;
 	size_t	k;
 
-	t->flags |= DOT;
-	t->flags &= ~ZERO_PAD;
 	len = 0;
 	j = t->pos;
 	j = j + 1;
@@ -66,7 +63,7 @@ void	store_precision(t_info *t, const char *str)
 
 void	store_width(t_info *t, const char *str)
 {
-	char 	*width_ascii;
+	char	*width_ascii;
 	size_t	len;
 	size_t	j;
 	size_t	k;
@@ -119,7 +116,11 @@ void	analyse_conversion(t_info *t, const char *str, va_list ap)
 	while (str[t->pos] >= '1' && str[t->pos] <= '9')
 		store_width(t, str);
 	if (str[t->pos] == '.')
+	{
+		t->flags |= DOT;
+		t->flags &= ~ZERO_PAD;
 		store_precision(t, str);
+	}
 	if (if_symbol("cspdiuxX%", str[t->pos]) == TRUE)
 		go_to_conversion(t, str, ap);
 }

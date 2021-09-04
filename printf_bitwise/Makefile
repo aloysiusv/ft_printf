@@ -3,7 +3,9 @@ CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror -Wformat=0
 INC			= 	-I ./
 OBJS		=	$(SRCS:.c=.o)
-SRCS		=	printf_bitwise.c parse_bitwise.c convert_bitwise.c utils_bitwise.c 
+SRCS		=	bitwise_printf.c bitwise_parse.c bitwise_print_numbers.c \
+				bitwise_utils.c bitwise_utils_base.c bitwise_utils_prec_width.c \
+				bitwise_print_chars.c
 
 all:		$(NAME)
 
@@ -13,8 +15,8 @@ $(NAME):	$(OBJS)
 %.o:		%.c ft_printf.h # -c permet de compiler .c en .o # -o permet de rassembler les .o pour créer l'exécutable # $@ =>  règle  $< => 1ère dépendance
 			$(CC) $(CFLAGS) $(INC) -c -o $@ $< 
 
-test:		$(OBJS) main_bitwise.o # -lbsd pour bsd string
-			@$(CC) $(CFLAGS) -fsanitize=address $(OBJS) main_bitwise.o
+test:		$(OBJS) bitwise_main.o # -lbsd pour bsd string
+			@$(CC) $(CFLAGS) -fsanitize=address $(OBJS) bitwise_main.o
 			@./a.out
 
 bonus:		all

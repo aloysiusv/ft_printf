@@ -47,16 +47,15 @@ size_t	do_your_magic(const char *str, t_info *t, va_list ap)
 	return (t->nbytes);
 }
 
-int ft_printf(const char *format, ...)
+int	ft_printf(const char *format, ...)
 {
 	va_list	ap;
 	t_info	t[1];
-	
+
 	if (format == NULL)
 		return (-1);
 	va_start(ap, format);
 	t->nbytes = do_your_magic(format, t, ap);
 	va_end(ap);
-
 	return (t->nbytes);
 }

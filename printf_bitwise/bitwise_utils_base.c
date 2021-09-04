@@ -1,26 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_bitwise.c                                    :+:      :+:    :+:   */
+/*   bitwise_utils_base.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrandria <lrandria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/22 22:08:00 by lrandria          #+#    #+#             */
-/*   Updated: 2021/08/22 22:08:00 by lrandria         ###   ########.fr       */
+/*   Created: 2021/09/04 21:04:08 by lrandria          #+#    #+#             */
+/*   Updated: 2021/09/04 21:04:08 by lrandria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
 
 size_t	ft_ulllen_base(unsigned long long n, size_t base_len)
 {
@@ -55,36 +45,6 @@ size_t	ft_intlen_base(int n, size_t base_len)
 		len++;
 	}
 	return (len);
-}
-
-t_bool	if_symbol(const char *s, char c)
-
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == c)
-			return (TRUE);
-		i++;
-	}
-	return (FALSE);
-}
-
-size_t	ft_atoui(const char *str)
-{
-	size_t	i;
-	size_t	res;
-
-	i = 0;
-	res = 0;
-	while (str[i] && str[i] >= '0' && str[i] <= '9')
-	{
-		res = (res * 10) + (str[i] - '0');
-		i++;
-	}
-	return (res);
 }
 
 void	ull_putnbrbase(t_info *t, unsigned long long nb, char *str, size_t base)
