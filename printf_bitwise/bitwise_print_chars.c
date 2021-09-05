@@ -35,7 +35,7 @@ void	print_s(t_info *t, va_list ap)
 		s = "(null)";
 	len = (int)ft_strlen(s);
 	if ((t->flags & DOT) && t->prec < len)
-		len = t->prec;
+		adjust_len(t, &len, 0, 0);
 	if (t->flags & DASH)
 		t->nbytes += write(1, s, len);
 	if (t->width > len)

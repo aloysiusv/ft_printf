@@ -47,17 +47,17 @@ void			print_s(t_info *t, va_list ap);
 void			print_p(t_info *t, va_list ap);
 void			print_di(t_info *t, va_list ap);
 void			print_u(t_info *t, va_list ap);
-void			print_xX(t_info *t, va_list ap, char *ox, char *base);
+void			print_xX(t_info *t, va_list ap, char *base);
 void			print_percent(t_info *t);
 
 size_t			ft_strlen(const char *s);
 size_t			ft_atoui(const char *str);
-void			adjust_len(t_info *t, int *len, long di);
 t_bool			if_symbol(const char *s, char c);
+void			adjust_len(t_info *t, int *len, int init_len, long di);
 
 t_bool			print_nothing(t_info *t, long di);
-void			print_pre_signs(t_info *t, int init_len, long di);
-void			print_post_signs(t_info *t, int len, int init_len, long di);
+void			print_extras(t_info *t, int init_len, long di);
+void			print_signs(t_info *t, long di);
 void			print_padding(t_info *t, int len, int init_len);
 void			print_width(t_info *t, int len, long di);
 

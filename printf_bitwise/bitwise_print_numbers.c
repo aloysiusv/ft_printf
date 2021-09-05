@@ -38,6 +38,14 @@ void	print_p(t_info *t, va_list ap)
 	}
 }
 
+void	final_di(t_info *t, int len, int init_len, long di)
+{
+	if (!(t->flags & ZERO_PAD))
+		print_signs(t, di);
+	print_padding(t, len, init_len);
+	long_putnbrbase(t, di, "0123456789", 10);
+}
+
 void	print_di(t_info *t, va_list ap)
 {
 	long	di;
@@ -49,20 +57,13 @@ void	print_di(t_info *t, va_list ap)
 	len = init_len;
 	if (print_nothing(t, di) == TRUE)
 		return ;
-	if ((t->flags & DOT) && t->prec >= init_len)
-		adjust_len(t, &len, di);
-	print_pre_signs(t, init_len, di);
+	adjust_len(t, &len, init_len, di);
+	print_extras(t, init_len, di);
 	if (t->flags & DASH)
-	{
-		print_post_signs(t, len, init_len, di);
-		long_putnbrbase(t, di, "0123456789", 10);
-	}
+		final_di(t, len, init_len, di);
 	print_width(t, len, di);
 	if (!(t->flags & DASH))
-	{
-		print_post_signs(t, len, init_len, di);
-		long_putnbrbase(t, di, "0123456789", 10);
-	}
+		final_di(t, len, init_len, di);
 }
 
 void	print_u(t_info *t, va_list ap)
@@ -76,8 +77,7 @@ void	print_u(t_info *t, va_list ap)
 	len = init_len;
 	if (print_nothing(t, u) == TRUE)
 		return ;
-	if ((t->flags & DOT) && t->prec > init_len)
-		adjust_len(t, &len, 0);
+	adjust_len(t, &len, init_len, 0);
 	if (t->flags & DASH)
 	{
 		print_padding(t, len, init_len);
@@ -91,7 +91,7 @@ void	print_u(t_info *t, va_list ap)
 	}
 }
 
-void	print_xX(t_info *t, va_list ap, char *hash, char *base)
+void	print_xX(t_info *t, va_list ap, char *base)
 {
 	unsigned int	x;
 	int				init_len;
@@ -102,10 +102,9 @@ void	print_xX(t_info *t, va_list ap, char *hash, char *base)
 	len = init_len;
 	if (print_nothing(t, x) == TRUE)
 		return ;
-	if ((t->flags & DOT) && t->prec > init_len)
-		adjust_len(t, &len, 0);
-	if ((t->flags & HASH) && x != 0)
-		t->nbytes += write(1, hash, 2);
+	adjust_len(t, &len, init_len, 0);
+	if (x != 0)
+		print_extras(t, init_len, 0);
 	if (t->flags & DASH)
 	{
 		print_padding(t, len, init_len);

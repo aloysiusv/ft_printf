@@ -52,10 +52,13 @@ size_t	ft_atoui(const char *str)
 	return (res);
 }
 
-void	adjust_len(t_info *t, int *len, long di)
+void	adjust_len(t_info *t, int *len, int init_len, long di)
 {
-	if (t->type == 'd' || t->type == 'i')
-		if (di < 0)
-			t->prec += 1;
-	*len = t->prec;
+	if ((t->flags & DOT) && t->prec >= init_len)
+	{
+		if (t->type == 'd' || t->type == 'i')
+			if (di < 0)
+				t->prec += 1;
+		*len = t->prec;
+	}
 }

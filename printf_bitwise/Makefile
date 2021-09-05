@@ -3,9 +3,9 @@ CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror -Wformat=0
 INC			= 	-I ./
 OBJS		=	$(SRCS:.c=.o)
-SRCS		=	bitwise_printf.c bitwise_parse.c bitwise_print_numbers.c \
-				bitwise_utils.c bitwise_utils_base.c bitwise_utils_prec_width.c \
-				bitwise_print_chars.c
+SRCS		=	bitwise_printf.c bitwise_parse.c \
+				bitwise_print_numbers.c bitwise_print_chars.c \
+				bitwise_print_more.c bitwise_utils.c bitwise_utils_base.c
 
 all:		$(NAME)
 

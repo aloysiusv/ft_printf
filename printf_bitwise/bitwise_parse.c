@@ -26,9 +26,9 @@ void	go_to_conversion(t_info *t, const char *str, va_list ap)
 	if (t->type == 'u')
 		print_u(t, ap);
 	if (t->type == 'x')
-		print_xX(t, ap, "0x", "0123456789abcdef");
+		print_xX(t, ap, "0123456789abcdef");
 	if (t->type == 'X')
-		print_xX(t, ap, "0X", "0123456789ABCDEF");
+		print_xX(t, ap, "0123456789ABCDEF");
 	if (t->type == '%')
 		print_percent(t);
 }
