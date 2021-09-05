@@ -20,7 +20,7 @@ void	print_c(t_info *t, va_list ap)
 	if (t->flags & DASH)
 		t->nbytes += write(1, &c, 1);
 	if (t->width > 1)
-		print_width(t, 1, 0);
+		print_width(t, 1, 0, 0);
 	if (!(t->flags & DASH))
 		t->nbytes += write(1, &c, 1);
 }
@@ -39,7 +39,7 @@ void	print_s(t_info *t, va_list ap)
 	if (t->flags & DASH)
 		t->nbytes += write(1, s, len);
 	if (t->width > len)
-		print_width(t, len, 0);
+		print_width(t, len, 0, 0);
 	if (!(t->flags & DASH))
 		t->nbytes += write(1, s, len);
 }

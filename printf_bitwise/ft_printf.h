@@ -59,7 +59,7 @@ t_bool			print_nothing(t_info *t, long di);
 void			print_extras(t_info *t, int init_len, long di);
 void			print_signs(t_info *t, long di);
 void			print_padding(t_info *t, int len, int init_len);
-void			print_width(t_info *t, int len, long di);
+void			print_width(t_info *t, int len, long di, unsigned int x);
 
 size_t			ft_ulllen_base(unsigned long long n, size_t base_len);
 size_t			ft_intlen_base(int n, size_t base_len);

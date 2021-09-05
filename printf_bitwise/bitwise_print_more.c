@@ -26,9 +26,9 @@ void	print_signs(t_info *t, long di)
 		t->nbytes += write(1, "-", 1);
 }
 
-void	print_width(t_info *t, int len, long di)
+void	print_width(t_info *t, int len, long di, unsigned int x)
 {
-	if ((t->flags & HASH)) && (t->type == 'x' ||t->type == 'X')
+	if ((t->flags & HASH) && (t->type == 'x' ||t->type == 'X') && (x != 0))
 		len += 2;
 	if ((t->flags & PLUS) && (t->type == 'd' || t->type == 'i') && !(di < 0))
 		len += 1;
@@ -45,7 +45,7 @@ t_bool	print_nothing(t_info *t, long di)
 {
 	if ((t->flags & DOT) && t->prec == 0 && di == 0)
 	{
-		print_width(t, 0, 0);
+		print_width(t, 0, 0, 0);
 		return (TRUE);
 	}
 	return (FALSE);

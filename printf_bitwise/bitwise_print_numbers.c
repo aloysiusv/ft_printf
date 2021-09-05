@@ -30,7 +30,7 @@ void	print_p(t_info *t, va_list ap)
 		ull_putnbrbase(t, p, "0123456789abcdef", 16);
 	}
 	if (t->width > len)
-		print_width(t, len, 0);
+		print_width(t, len, 0, 0);
 	if (!(t->flags & DASH))
 	{
 		t->nbytes += write(1, "0x", 2);
@@ -61,7 +61,7 @@ void	print_di(t_info *t, va_list ap)
 	print_extras(t, init_len, di);
 	if (t->flags & DASH)
 		final_di(t, len, init_len, di);
-	print_width(t, len, di);
+	print_width(t, len, di, 0);
 	if (!(t->flags & DASH))
 		final_di(t, len, init_len, di);
 }
@@ -83,7 +83,7 @@ void	print_u(t_info *t, va_list ap)
 		print_padding(t, len, init_len);
 		ull_putnbrbase(t, u, "0123456789", 10);
 	}
-	print_width(t, len, 0);
+	print_width(t, len, 0, 0);
 	if (!(t->flags & DASH))
 	{
 		print_padding(t, len, init_len);
@@ -110,7 +110,7 @@ void	print_xX(t_info *t, va_list ap, char *base)
 		print_padding(t, len, init_len);
 		ull_putnbrbase(t, x, base, 16);
 	}
-	print_width(t, len, 0);
+	print_width(t, len, 0, x);
 	if (!(t->flags & DASH))
 	{
 		print_padding(t, len, init_len);
