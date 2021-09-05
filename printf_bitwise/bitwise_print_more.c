@@ -28,7 +28,7 @@ void	print_signs(t_info *t, long di)
 
 void	print_width(t_info *t, int len, long di)
 {
-	if (t->flags & HASH)
+	if ((t->flags & HASH)) && (t->type == 'x' ||t->type == 'X')
 		len += 2;
 	if ((t->flags & PLUS) && (t->type == 'd' || t->type == 'i') && !(di < 0))
 		len += 1;
