@@ -32,7 +32,10 @@ void	print_s(t_info *t, va_list ap)
 
 	s = va_arg(ap, char *);
 	if (s == NULL)
+	{
 		s = "(null)";
+		return ;
+	}
 	len = (int)ft_strlen(s);
 	if ((t->flags & DOT) && t->prec < len)
 		adjust_len(t, &len, 0, 0);

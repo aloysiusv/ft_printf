@@ -292,5 +292,7 @@ printf("RET MINE = [%d]\n", ft_printf("Mine: 	[%+.5d]\n", 4224));
 	printf("MINE RET = [%d]\n", ft_printf(" [%-5.10u] ", 45));
 	printf("REAL RET = [%d]\n", printf(" [%-5p] ", 45));
 	printf("MINE RET = [%d]\n", ft_printf(" [%-5p] ", 45));
+	printf("REAL RET = [%d]\n", printf(" [%.2s] ", str0));
+	printf("MINE RET = [%d]\n", ft_printf(" [%.2s] ", str0));
 	return (0);
 }
