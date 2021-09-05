@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bitwise_print_chars.c                              :+:      :+:    :+:   */
+/*   print_chars_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrandria <lrandria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/04 21:07:16 by lrandria          #+#    #+#             */
-/*   Updated: 2021/09/04 21:07:16 by lrandria         ###   ########.fr       */
+/*   Created: 2021/09/05 14:33:44 by lrandria          #+#    #+#             */
+/*   Updated: 2021/09/05 14:33:44 by lrandria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 void	print_c(t_info *t, va_list ap)
 {
@@ -32,10 +32,7 @@ void	print_s(t_info *t, va_list ap)
 
 	s = va_arg(ap, char *);
 	if (s == NULL)
-	{
 		s = "(null)";
-		return ;
-	}
 	len = (int)ft_strlen(s);
 	if ((t->flags & DOT) && t->prec < len)
 		adjust_len(t, &len, 0, 0);

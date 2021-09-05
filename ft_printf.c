@@ -12,15 +12,31 @@
 
 #include "ft_printf.h"
 
-void 	reset_type(t_info *t)
+void	go_to_conversion(t_info *t, va_list ap)
 {
-	TYPE = '\0';
+	if (t->type == 'c' || t->type == '%')
+		print_c_or_percent(t, ap);
+	if (t->type == 's')
+		print_s(t, ap);
+	if (t->type == 'p')
+		print_p(t, ap);
+	if (t->type == 'd' || t->type == 'i')
+		print_di(t, ap);
+	if (t->type == 'u')
+		print_u(t, ap);
+	if (t->type == 'x' || t->type == 'X')
+		print_hex(t, ap);
+}
+
+void	reset_type(t_info *t)
+{
+	t->type = '\0';
 }
 
 void	init_info(t_info *t)
 {
-	TYPE = '\0';
-	NBYTES = 0;
+	t->type = '\0';
+	t->nbytes = 0;
 }
 
 size_t	do_your_magic(const char *str, t_info *t, va_list ap)
@@ -35,56 +51,26 @@ size_t	do_your_magic(const char *str, t_info *t, va_list ap)
 		{
 			reset_type(t);
 			i++;
-			TYPE = str[i];
-			if (TYPE == '%')
-				NBYTES += write(1, "%", 1);
-			else if (if_symbol("cspdiuxX", TYPE) == TRUE)
+			t->type = str[i];
+			if (t->type == '%')
+				t->nbytes += write(1, "%", 1);
+			else if (if_symbol("cspdiuxX", t->type) == TRUE)
 				go_to_conversion(t, ap);
 		}
 		else
-			NBYTES += write(1, &str[i], 1);
+			t->nbytes += write(1, &str[i], 1);
 		i++;
 	}
-	return (NBYTES);
+	return (t->nbytes);
 }
 
-int ft_printf(const char *format, ...)
+int	ft_printf(const char *format, ...)
 {
 	va_list		ap;
-	t_info	t[1];
-	
+	t_info		t[1];
+
 	va_start(ap, format);
-	NBYTES = do_your_magic(format, t, ap);
+	t->nbytes = do_your_magic(format, t, ap);
 	va_end(ap);
-
-	return (NBYTES);
+	return (t->nbytes);
 }
-
-// #include <stdio.h>
-// #include "limits.h"
-
-// int	main()
-// {
-// 	char	*str 	= NULL;
-	
-// 	printf("");
-// 	ft_printf("");
-// 	printf("Real: Hello World!\n");
-// 	ft_printf("Mine: Hello World!\n");
-// 	printf("Real: %c\n", 'Z');
-// 	ft_printf("Mine: %c\n", 'Z');
-// 	printf("Real: %c, %s\n", 'A', "hoy");
-// 	ft_printf("Mine: %c, %s\n", 'A', "hoy");
-// 	printf("Real: STR = %s\nReal: PTR = %p\n", str, str);
-// 	ft_printf("Mine: STR = %s\nMine: PTR = %p\n", str, str);
-// 	printf("Real: %d, %i\n", INT_MIN, 2147483648);
-// 	ft_printf("Mine: %d, %i\n", INT_MIN, 2147483648);
-// 	printf("Real: %u, %u, %u\n", 0, 346983, 2147483648);
-// 	ft_printf("Mine: %u, %u, %u\n", 0, 346983, 2147483648);
-// 	printf("Real: %x, %X, %x\n", 0, 346983, 2147483648);
-// 	ft_printf("Mine: %x, %X, %x\n", 0, 346983, 2147483648);
-// 	printf("Real: %%, %%\n");
-// 	ft_printf("Mine: %%, %%\n");
-
-// 	return (0);
-// }

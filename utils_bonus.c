@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrandria <lrandria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/22 14:44:02 by lrandria          #+#    #+#             */
-/*   Updated: 2021/08/22 14:44:02 by lrandria         ###   ########.fr       */
+/*   Created: 2021/09/05 14:34:49 by lrandria          #+#    #+#             */
+/*   Updated: 2021/09/05 14:34:49 by lrandria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,42 +22,8 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-size_t	ft_ulllen_base(unsigned long long n, size_t base_len)
-{
-	size_t	len;
+t_bool	if_symbol(const char *s, char c)
 
-	len = 0;
-	if (n == 0)
-		len = len + 1;
-	while (n)
-	{
-		n /= base_len;
-		len++;
-	}
-	return (len);
-}
-
-size_t	ft_intlen_base(int n, size_t base_len)
-{
-	long	n_long;
-	size_t	len;
-
-	len = 0;
-	n_long = n;
-	if (n <= 0)
-	{
-		n_long = -n_long;
-		len += 1;
-	}
-	while (n_long)
-	{
-		n_long /= base_len;
-		len++;
-	}
-	return (len);
-}
-
-unsigned int	if_symbol(const char *s, char c)
 {
 	size_t	i;
 
@@ -86,24 +52,13 @@ size_t	ft_atoui(const char *str)
 	return (res);
 }
 
-void	ull_putnbrbase(t_info *t, unsigned long long nb, char *str, size_t base)
+void	adjust_len(t_info *t, int *len, int init_len, long di)
 {
-	unsigned long long	lol;
-
-	lol = nb;
-	if (lol >= base)
-		ull_putnbrbase(t, lol / base, str, base);
-	NBYTES += write(1, &str[lol % base], 1);
-}
-
-void	long_putnbrbase(t_info *t, int nb, char *str, long base)
-{
-	long	lol;
-
-	lol = nb;
-	if (nb < 0)
-		lol = -lol;
-	if (lol >= base)
-		long_putnbrbase(t, lol / base, str, base);
-	NBYTES += write(1, &str[lol % base], 1);
+	if ((t->flags & DOT) && t->prec >= init_len)
+	{
+		if (t->type == 'd' || t->type == 'i')
+			if (di < 0)
+				t->prec += 1;
+		*len = t->prec;
+	}
 }

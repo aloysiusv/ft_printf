@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bitwise_print_more.c                               :+:      :+:    :+:   */
+/*   print_more_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrandria <lrandria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/05 03:24:04 by lrandria          #+#    #+#             */
-/*   Updated: 2021/09/05 03:24:04 by lrandria         ###   ########.fr       */
+/*   Created: 2021/09/05 14:33:58 by lrandria          #+#    #+#             */
+/*   Updated: 2021/09/05 14:33:58 by lrandria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 void	print_padding(t_info *t, int len, int init_len)
 {
@@ -28,7 +28,7 @@ void	print_signs(t_info *t, long di)
 
 void	print_width(t_info *t, int len, long di, unsigned int x)
 {
-	if ((t->flags & HASH) && (t->type == 'x' ||t->type == 'X') && (x != 0))
+	if ((t->flags & HASH) && (t->type == 'x' || t->type == 'X') && (x != 0))
 		len += 2;
 	if ((t->flags & PLUS) && (t->type == 'd' || t->type == 'i') && !(di < 0))
 		len += 1;

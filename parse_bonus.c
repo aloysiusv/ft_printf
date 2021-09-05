@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_bitwise.c                                    :+:      :+:    :+:   */
+/*   parse_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrandria <lrandria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/22 21:40:10 by lrandria          #+#    #+#             */
-/*   Updated: 2021/08/22 21:40:10 by lrandria         ###   ########.fr       */
+/*   Created: 2021/09/05 14:33:25 by lrandria          #+#    #+#             */
+/*   Updated: 2021/09/05 14:33:25 by lrandria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 void	go_to_conversion(t_info *t, const char *str, va_list ap)
 {
@@ -26,9 +26,9 @@ void	go_to_conversion(t_info *t, const char *str, va_list ap)
 	if (t->type == 'u')
 		print_u(t, ap);
 	if (t->type == 'x')
-		print_xX(t, ap, "0123456789abcdef");
+		print_hex(t, ap, "0123456789abcdef");
 	if (t->type == 'X')
-		print_xX(t, ap, "0123456789ABCDEF");
+		print_hex(t, ap, "0123456789ABCDEF");
 	if (t->type == '%')
 		print_percent(t);
 }

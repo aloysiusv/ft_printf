@@ -17,11 +17,8 @@
 # include <stdlib.h>
 # include <stdarg.h>
 
-# define	FALSE		0
-# define	TRUE		1
-
-# define	TYPE		t->type
-# define	NBYTES		t->nbytes
+# define FALSE		0
+# define TRUE		1
 
 typedef struct s_info
 {
@@ -30,11 +27,18 @@ typedef struct s_info
 }				t_info;
 
 int				ft_printf(const char *format, ...);
-void			go_to_conversion(t_info *t, va_list ap);
+
+void			print_c_or_percent(t_info *t, va_list ap);
+void			print_s(t_info *t, va_list ap);
+
+void			print_p(t_info *t, va_list ap);
+void			print_di(t_info *t, va_list ap);
+void			print_u(t_info *t, va_list ap);
+void			print_hex(t_info *t, va_list ap);
 
 size_t			ft_strlen(const char *s);
 unsigned int	if_symbol(const char *s, char c);
-void			ull_putnbrbase(t_info *t, unsigned long long nb, 
-				char *str, size_t base);
 void			int_putnbrbase(t_info *t, long nb, char *str, int base);
+void			ull_putnbrbase(t_info *t, unsigned long long nb,
+					char *str, size_t base);
 #endif

@@ -43,7 +43,7 @@ void	ull_putnbrbase(t_info *t, unsigned long long nb, char *str, size_t base)
 	lol = nb;
 	if (lol >= base)
 		ull_putnbrbase(t, lol / base, str, base);
-	NBYTES += write(1, &str[lol % base], 1);
+	t->nbytes += write(1, &str[lol % base], 1);
 }
 
 void	int_putnbrbase(t_info *t, long nb, char *str, int base)
@@ -55,9 +55,9 @@ void	int_putnbrbase(t_info *t, long nb, char *str, int base)
 	else
 	{
 		lol = -nb;
-		NBYTES += write(1, "-", 1);
+		t->nbytes += write(1, "-", 1);
 	}
 	if (lol >= base)
 		int_putnbrbase(t, lol / base, str, base);
-	NBYTES += write(1, &str[lol % base], 1);
+	t->nbytes += write(1, &str[lol % base], 1);
 }

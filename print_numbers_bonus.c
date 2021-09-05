@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bitwise_print_numbers.c                            :+:      :+:    :+:   */
+/*   print_numbers_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrandria <lrandria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/04 21:08:48 by lrandria          #+#    #+#             */
-/*   Updated: 2021/09/04 21:08:48 by lrandria         ###   ########.fr       */
+/*   Created: 2021/09/05 14:34:16 by lrandria          #+#    #+#             */
+/*   Updated: 2021/09/05 14:34:16 by lrandria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 void	print_p(t_info *t, va_list ap)
 {
@@ -91,7 +91,7 @@ void	print_u(t_info *t, va_list ap)
 	}
 }
 
-void	print_xX(t_info *t, va_list ap, char *base)
+void	print_hex(t_info *t, va_list ap, char *base)
 {
 	unsigned int	x;
 	int				init_len;
